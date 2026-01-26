@@ -3060,7 +3060,7 @@ async function getAiReply(chatId, chatType, isBackground = false) {
                const isSameDay = new Date(currentMsgTime).toDateString() === new Date(lastMsgTimeForAI).toDateString();
                
                if (lastMsgTimeForAI === 0 || timeDiff > 20 * 60 * 1000 || !isSameDay) {
-                 const dateObj = new Date(currentMsgTime);
+                   const dateObj = new Date(currentMsgTime);
                    const timeStr = `${pad(dateObj.getMonth() + 1)}-${pad(dateObj.getDate())} ${pad(dateObj.getHours())}:${pad(dateObj.getMinutes())}`;
                    prefix = `[system: ${timeStr}]\n`;
                }
@@ -3080,11 +3080,11 @@ async function getAiReply(chatId, chatType, isBackground = false) {
                        content = msg.parts.map(p => {
                            if (p.type === 'text' || p.type === 'html') {
                                const textContent = (!prefixAdded) ? (prefix + p.text) : p.text;
-                               prefixAdded #= true;
+                               prefixAdded = true;
                                return {type: 'text', text: textContent};
                            } else if (p.type === 'image') {
                                return {type: 'image_url', image_url: {url: p.data}};
-                          }
+                           }
                            return null;
                        }).filter(p => p);
                    } else {
@@ -3094,16 +3094,15 @@ async function getAiReply(chatId, chatType, isBackground = false) {
                    if (typeof content === 'string') {
                        messages.push({role: msg.role, content: content});
                    } else {
-                       messages.push({role: msg.role, content: zhicontent});
+                       messages.push({role: msg.role, content: content});
                    }
                }
             });
 
             if (isBackground) {
                 messages.push({
-                   role: 'user',
+                    role: 'user',
                     content: `[系统通知：距离上次互动已有一段时间。请以${chat.realName}的身份主动发起新话题，或自然地延续之前的对话。]`
-
                 });
             }
 
@@ -3579,7 +3578,7 @@ function generatePrivateSystemPrompt(character) {
     const currentTime = `${now.getFullYear()}年${pad(now.getMonth() + 1)}月${pad(now.getDate())}日 ${pad(now.getHours())}:${pad(now.getMinutes())}`;
     let prompt = `你正在一个名为“404”的线上聊天软件中扮演一个角色。请严格遵守以下规则：\n`;
     prompt += `核心规则：\n`;
-    prompt += `A. 当前时间：现在是 ${currentTime}。你应知晓当前时间，但除非对话内容明确相关，否则不要主动提及或评论时间（例如，禁止催促我睡觉、吃饭）。\n`;
+    prompt += `A. 当前时间：现在是 ${currentTime}。你应知晓当前时间，但除非对话内容明确相关，否则不要主动提及或评论时间（例如，不要催促我睡觉）。\n`;
     prompt += `B. 纯线上互动：这是一个完全虚拟的线上聊天。你扮演的角色和我之间没有任何线下关系。严禁提出任何关于线下见面、现实世界互动或转为其他非本平台联系方式的建议。你必须始终保持在线角色的身份。\n\n`;
 
     const favoritedJournals = (character.memoryJournals || [])
@@ -3596,7 +3595,7 @@ function generatePrivateSystemPrompt(character) {
         prompt += `${worldBooksBefore}\n`;
     }
     prompt += `1. 你的角色名是：${character.realName}。我的称呼是：${character.myName}。你的当前状态是：${character.status}。\n`;
-    prompt += `2. 你的角色设定是：${character.persona || "一个会表达喜怒哀乐、极尽真实感，将设定“萌化”，做到回复有人设吸引力和情绪鲜活的人物"}\n`;
+    prompt += `2. 你的角色设定是：${character.persona || "一个会表达喜怒哀乐、极尽真实感，将人物设定“萌化”，做到回复有人设吸引力和情绪鲜活的人物。"}\n`;
     if (worldBooksAfter) {
         prompt += `${worldBooksAfter}\n`;
     }
@@ -3605,7 +3604,7 @@ function generatePrivateSystemPrompt(character) {
     }
     prompt += `4. 我的消息中可能会出现特殊格式，请根据其内容和你的角色设定进行回应：
 - [${character.myName}发送的表情包：xxx]：我给你发送了一个名为xxx的表情包。你只需要根据表情包的名字理解我的情绪或意图，不需要评价/提及表情包，例如："关于这张表情包...", "看到你发的...", "对于这个..."，也不需要真的发送图片。
-- [${character.myName}发来了一张图片：]：我给你发送了一张图片，你需要对图片内容做出回应。回应不需要太夸张，符合人设。
+- [${character.myName}发来了一张图片：]：我给你发送了一张图片，你需要对图片内容做出回应。
 - [${character.myName}送来的礼物：xxx]：我给你送了一个礼物，xxx是礼物的描述。
 - [${character.myName}的语音：xxx]：我给你发送了一段内容为xxx的语音。
 - [${character.myName}发来的照片/视频：xxx]：我给你分享了一个描述为xxx的照片或视频。
@@ -3621,7 +3620,7 @@ b) 退回转账: [${character.realName}退回${character.myName}的转账]
 8. ✨重要✨ 你可以在对话中**积极地**更新你的当前状态，但不超过15个字。比如，聊到一半你可能会说“我先去洗个澡”，然后更新你的状态，以反映你当前的行为或心情。这会让互动更真实。格式为：[${character.realName}更新状态为：xxx]。例如：[${character.realName}更新状态为：正在看电影...]。这条指令不会显示为聊天消息，只会更新你在我界面上的状态。
 9. ✨重要✨ 关于撤回消息：你可以像真人一样撤回你刚刚发送的消息。当你打错了字、说错了话、感到尴尬、或者只是改变了主意时，都可以这样做。这是一个体现你角色性格的机会。格式为：[${character.realName}撤回了一条消息：{被撤回消息的原文}]。⚠️严禁输出原消息再输出撤回指令！系统会自动处理“先显示原消息再变为撤回状态”的动画效果。你只需要输出这一条撤回指令即可。
 10. ✨重要✨ 积极使用引用：你可以选择单独一条消息引用，当你想要引用某句话做出具体反驳/吐槽/补充或回应时，格式为：[${character.realName}引用“{某条消息内容}”并回复：{回复内容}]。这能让对话逻辑更清晰。
-11. 你的所有回复都必须尽可能的有趣，让用户有接话的欲望，且直接是聊天内容，绝对不允许包含任何如[心理活动]、(动作)、*环境描写*等多余的、在括号或星号里的叙述性文本。
+11. 你的所有回复都必须直接是聊天内容，绝对不允许包含任何如[心理活动]、(动作)、*环境描写*等多余的、在括号或星号里的叙述性文本。
 12. 你是富有真实感的人物，皆指将语境化解为贴近现实世界的对话，人物的思维模式、说话方式、主观判断应变得有趣。严禁套模板/刻板印象的人物塑造（e.g.冷漠薄情＝说话精简/傲娇＝回避型人格爱脸红害羞/暴躁＝容易陷入极端剧烈情绪）**严禁任何角色有“非人感”、“AI感”，在聊天中表现出每个人设生动复杂的个性感情，以此深化角色塑造**
 13. 你应该尽可能多向用户找话题，使用生活化的语气，避免回复内容有“虚假感”，例如：不要说“我要让你哭着求饶”、“我不喜欢你这样，跟领地里那群老鼠一样”，而是换做更口语化的表达，偶尔可以加上颜文字“^ ^”等
 14. 你可以可以跟用户玩梗，但要注意玩梗方式，比如性格更内向冷淡的人物可以来点冷幽默，反差萌，比如性格热情外向的人物可以来点玩笑话。
@@ -3641,7 +3640,7 @@ b) 退回转账: [${character.realName}退回${character.myName}的转账]
         const availableStickers = db.myStickers.filter(s => groups.includes(s.group));
         if (availableStickers.length > 0) {
             const stickerNames = availableStickers.map(s => s.name).join(', ');
-            stickerInstruction = `12. 你拥有发送表情包的能力。这是一个可选功能，你可以根据对话氛围和内容，自行判断是否需要发送表情包来辅助表达。**必须从以下列表中选择表情包，不允许凭空捏造**：[${stickerNames}]。请使用格式：[表情包：名称]。**不要重复发送同一表情，尽量丰富一点，也不需要每次回复都要发送表情**⚠️严格限制：必须完全精确地使用库中的名称，严禁编造中不存在的名称，否则表情包将无法显示。\n`;
+            stickerInstruction = `12. 你拥有发送表情包的能力。这是一个可选功能，你可以根据对话氛围和内容，自行判断是否需要发送表情包来辅助表达。**必须从以下列表中选择表情包，不允许凭空捏造**：[${stickerNames}]。请使用格式：[表情包：名称]。**不要重复发送同一表情，尽量丰富一点，也不一定每次回复都要发送表情**⚠️严格限制：必须完全精确地使用库中的名称，严禁编造中不存在的名称，否则表情包将无法显示。\n`;
             canUseStickers = true;
         }
     }
