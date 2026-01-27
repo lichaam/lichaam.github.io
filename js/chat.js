@@ -3639,7 +3639,7 @@ b) 退回转账: [${character.realName}退回${character.myName}的转账]
         const availableStickers = db.myStickers.filter(s => groups.includes(s.group));
         if (availableStickers.length > 0) {
             const stickerNames = availableStickers.map(s => s.name).join(', ');
-            stickerInstruction = `12. 你拥有发送表情包的能力。这是一个可选功能，你可以根据对话氛围和内容，自行判断是否需要发送表情包来辅助表达。**必须从以下列表中选择表情包，不允许凭空捏造**：[${stickerNames}]。请使用格式：[表情包：名称]。**不要重复发送同一表情，尽量丰富一点，也不需要每次回复都要发送表情**⚠️严格限制：必须完全精确地使用库中的名称，严禁编造中不存在的名称，否则表情包将无法显示。\n`;
+            stickerInstruction = `12. 你拥有发送表情包的能力。这是一个可选功能，你可以根据对话氛围和内容，自行判断是否需要发送表情包来辅助表达。**必须从以下列表中选择表情包，不允许凭空捏造**：[${stickerNames}]。请使用格式：[表情包：名称]。**不要重复发送同一表情，尽量丰富点，更不要每次都在消息末尾发送表情，表情可以在任何位置，更不需要每次回复都要发送表情**⚠️严格限制：必须完全精确地使用库中的名称，严禁编造中不存在的名称，否则表情包将无法显示。\n`;
             canUseStickers = true;
         }
     }
