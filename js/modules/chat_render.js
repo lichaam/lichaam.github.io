@@ -311,11 +311,11 @@ const contentMatch = content.match(/^\[.*?(?:消息|回复)[：:]([\s\S]+)\]$/);
             // 创建引用气泡 DOM
             const quoteDiv = document.createElement('div');
             quoteDiv.className = 'quoted-message';
-            if (quote.senderId === 'user_me') {
-               quoteDiv.classList.add('quote-from-me');
-           } else {
-               quoteDiv.classList.add('quote-from-others');
-           }
+           if (quote.role === 'user' || quote.senderId === 'user_me') {
+                quoteDiv.classList.add('quote-from-me');
+                 } else {
+                quoteDiv.classList.add('quote-from-others');
+             }
             const sanitizedQuotedText = DOMPurify.sanitize(quote.content, { ALLOWED_TAGS: [] });
             quoteDiv.innerHTML = `<span class="quoted-sender">回复 ${quotedSenderName}</span><p class="quoted-text">${sanitizedQuotedText}</p>`;
             
@@ -944,11 +944,11 @@ const contentMatch = content.match(/^\[.*?(?:消息|回复)[：:]([\s\S]+)\]$/);
                 }
                 const quoteDiv = document.createElement('div');
                 quoteDiv.className = 'quoted-message';
-                if (quote.senderId === 'user_me') {
-                   quoteDiv.classList.add('quote-from-me');
+                if (quote.role === 'user' || quote.senderId === 'user_me') {
+                quoteDiv.classList.add('quote-from-me');
                  } else {
-                   quoteDiv.classList.add('quote-from-others');
-                }
+                quoteDiv.classList.add('quote-from-others');
+             }
                 const sanitizedQuotedText = DOMPurify.sanitize(quote.content, { ALLOWED_TAGS: [] });
                 quoteDiv.innerHTML = `<span class="quoted-sender">回复 ${quotedSenderName}</span><p class="quoted-text">${sanitizedQuotedText}</p>`;
                 bubbleElement.prepend(quoteDiv);
@@ -977,11 +977,11 @@ const contentMatch = content.match(/^\[.*?(?:消息|回复)[：:]([\s\S]+)\]$/);
                 }
                 const quoteDiv = document.createElement('div');
                 quoteDiv.className = 'quoted-message';
-               if (quote.senderId === 'user_me') {
-                   quoteDiv.classList.add('quote-from-me');
+              if (quote.role === 'user' || quote.senderId === 'user_me') {
+                quoteDiv.classList.add('quote-from-me');
                  } else {
-                   quoteDiv.classList.add('quote-from-others');
-                }
+                quoteDiv.classList.add('quote-from-others');
+             }
                 const sanitizedQuotedText = DOMPurify.sanitize(quote.content, { ALLOWED_TAGS: [] });
                 quoteDiv.innerHTML = `<span class="quoted-sender">回复 ${quotedSenderName}</span><p class="quoted-text">${sanitizedQuotedText}</p>`;
                 bubbleElement.prepend(quoteDiv);
