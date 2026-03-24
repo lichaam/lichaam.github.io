@@ -41,6 +41,9 @@
     <link rel="stylesheet" href="css/modules/monitor.css">
     <link rel="stylesheet" href="css/modules/tutorial.css">
     <link rel="stylesheet" href="css/modules/live.css">
+    <link rel="stylesheet" href="css/modules/shop.css">
+    <link rel="stylesheet" href="css/modules/cot_settings.css">
+    <link rel="stylesheet" href="css/modules/video_call.css">
 
     <!-- Other Styles -->
     <link rel="stylesheet" href="contacts.css">
@@ -364,9 +367,9 @@
                     </div>
                     <div class="expansion-item" id="delete-history-btn">
                         <div class="expansion-item-icon">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg>
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
                         </div>
-                        <span class="expansion-item-name">清空</span>
+                        <span class="expansion-item-name">管理</span>
                     </div>
                     <div class="expansion-item" id="char-gallery-manage-btn">
                         <div class="expansion-item-icon">
@@ -379,6 +382,20 @@
                             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
                         </div>
                         <span class="expansion-item-name">捕获</span>
+                    </div>
+                    <div class="expansion-item" id="shop-btn">
+                        <div class="expansion-item-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 8.89l-1.06-4.24C20.67 3.82 19.92 3.25 19.06 3.25h-14.12c-0.86 0-1.61 0.57-1.78 1.4L2.1 8.89c-0.34 1.35 0.38 2.7 1.63 3.12l0.27 0.09V19c0 1.1 0.9 2 2 2h12c1.1 0 2-0.9 2-2v-6.9l0.27-0.09c1.25-0.42 1.97-1.77 1.63-3.12zM12 13c-1.1 0-2-0.9-2-2s0.9-2 2-2 2 0.9 2 2-0.9 2-2 2z"></path></svg>
+                        </div>
+                        <span class="expansion-item-name">商城</span>
+                    </div>
+                    <div class="expansion-item" id="video-call-btn">
+                        <div class="expansion-item-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-telephone-outbound" viewBox="0 0 16 16">
+                                <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511zM11 .5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V1.707l-4.146 4.147a.5.5 0 0 1-.708-.708L14.293 1H11.5a.5.5 0 0 1-.5-.5z"/>
+                            </svg>
+                        </div>
+                        <span class="expansion-item-name">通话</span>
                     </div>
                 </div>
             </div>
@@ -724,6 +741,12 @@
                         </div>
                         <span class="menu-item-label">状态栏</span>
                     </div>
+                    <div class="menu-item" data-action="cot-settings">
+                        <div class="menu-icon-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"></path><path d="M12 6v6l4 2"></path></svg>
+                        </div>
+                        <span class="menu-item-label">思维链</span>
+                    </div>
                     <div class="menu-item" data-action="calendar">
                         <div class="menu-icon-wrapper">
                             <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -740,6 +763,110 @@
             </div>
             
         </main>
+    </div>
+
+    <div id="cot-settings-screen" class="screen">
+        <header class="app-header">
+            <button class="back-btn" data-target="more-screen">‹</button>
+            <div class="title-container"><h1 class="title">思维链(CoT)设置</h1></div>
+            <div class="placeholder"></div>
+        </header>
+        <main class="content" style="padding: 15px;">
+            <div class="kkt-settings-container">
+                <!-- Tab 导航栏 -->
+                <div class="settings-tabs" id="cot-settings-tabs" style="margin-bottom: 15px;">
+                    <div class="settings-tab-item active" data-mode="chat">聊天</div>
+                    <div class="settings-tab-item" data-mode="call">通话</div>
+                </div>
+
+                <!-- 全局开关 -->
+                <div class="kkt-group">
+                    <div class="kkt-item">
+                        <div class="kkt-item-label">启用思维链 (CoT)</div>
+                        <div class="kkt-item-control">
+                            <label class="kkt-switch">
+                                <input type="checkbox" id="cot-enabled-switch">
+                                <span class="kkt-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="kkt-item">
+                        <div class="kkt-item-label">过境预设条目【复杂人设+活人化+行为一致性】</div>
+                        <div class="kkt-item-control">
+                            <label class="kkt-switch">
+                                <input type="checkbox" id="cot-human-run-switch">
+                                <span class="kkt-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 预设管理 -->
+                <div class="kkt-group" style="margin-top: 15px;">
+                    <div class="kkt-item" style="flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <div class="kkt-item-label">当前预设</div>
+                            <div style="display: flex; gap: 5px;">
+                                <button class="btn btn-small" id="cot-new-preset-btn">新建</button>
+                                <button class="btn btn-small" id="cot-manage-presets-btn">管理</button>
+                                <button class="btn btn-small danger" id="cot-reset-preset-btn">重置</button>
+                            </div>
+                        </div>
+                        <select id="cot-preset-select" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #eee; background: transparent;">
+                            <!-- JS populated -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 条目列表 -->
+                <div class="kkt-group" style="margin-top: 15px; padding-bottom: 10px;">
+                    <div class="kkt-item" style="border-bottom: 1px solid #f0f0f0; margin-bottom: 10px;">
+                        <div class="kkt-item-label" style="font-weight: bold;">Prompt 条目序列</div>
+                    </div>
+                    <div id="cot-items-list" style="display: flex; flex-direction: column; gap: 10px;">
+                        <!-- JS populated items -->
+                    </div>
+                    <button class="btn btn-secondary" id="cot-add-item-btn" style="margin-top: 15px; width: 100%;">+ 添加新条目</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- CoT Item Edit Modal -->
+    <div id="cot-item-edit-modal" class="modal-overlay">
+        <div class="modal-window">
+            <h3>编辑条目</h3>
+            <form id="cot-item-edit-form">
+                <input type="hidden" id="cot-item-id">
+                <div class="form-group">
+                    <label>条目名称</label>
+                    <input type="text" id="cot-item-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Prompt 内容</label>
+                    <textarea id="cot-item-content" rows="10" required style="font-family: monospace; font-size: 13px;"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">保存</button>
+                    <button type="button" id="cot-item-cancel-btn" class="btn btn-neutral" style="flex: 1;">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CoT Preset Manage Modal -->
+    <div id="cot-preset-manage-modal" class="modal-overlay">
+        <div class="modal-window" style="max-width: 520px;">
+            <h3>预设管理</h3>
+            <div id="cot-preset-list-container" style="max-height: 300px; overflow-y: auto; margin-bottom: 15px; border: 1px solid #eee; border-radius: 8px; padding: 10px;">
+                <!-- JS populated -->
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button id="cot-import-preset-btn" class="btn btn-secondary">导入</button>
+                <button id="cot-close-manage-modal-btn" class="btn btn-primary">关闭</button>
+            </div>
+            <input type="file" id="cot-import-file" accept=".json" style="display: none;">
+        </div>
     </div>
 
     <div id="status-bar-manager-screen" class="screen">
@@ -984,6 +1111,7 @@
             </div>
             <p style="font-size: 12px; color: #999; text-align: center; margin-bottom: 15px;">长按图片可保存到手机</p>
             <div style="display: flex; gap: 10px;">
+                <button id="download-capture-btn" class="btn btn-secondary" style="flex: 1;">下载图片</button>
                 <button id="close-capture-modal-btn" class="btn btn-primary" style="flex: 1;">关闭</button>
             </div>
         </div>
@@ -1033,6 +1161,24 @@
                                                                          placeholder="你希望Ta如何称呼你" required>
                 </div>
                 <button type="submit" class="btn btn-primary">创建</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Import Confirm Modal -->
+    <div id="import-confirm-modal" class="modal-overlay">
+        <div class="modal-window">
+            <h3>确认角色信息</h3>
+            <form id="import-confirm-form">
+                <div class="form-group">
+                    <label for="import-char-name">角色真名 (Real Name)</label>
+                    <input type="text" id="import-char-name" required>
+                    <p style="font-size: 12px; color: #888; margin-top: 5px;">这是系统识别角色的唯一标识，创建后不可修改，请谨慎确认。</p>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">确认导入</button>
+                    <button type="button" id="cancel-import-btn" class="btn btn-neutral" style="flex: 1;">取消</button>
+                </div>
             </form>
         </div>
     </div>
@@ -1293,7 +1439,7 @@
                             <div class="kkt-item">
                                 <div class="kkt-item-label">最大记忆轮数</div>
                                 <div class="kkt-item-control">
-                                    <input type="number" id="setting-max-memory" value="20" min="1" style="width:50px; text-align:right; border:none;">
+                                    <input type="number" id="setting-max-memory" value="100" min="1" style="width:50px; text-align:right; border:none;">
                                 </div>
                             </div>
                             <div class="kkt-item">
@@ -1343,6 +1489,32 @@
                                 <div class="kkt-item-control">
                                     <label class="kkt-switch">
                                         <input type="checkbox" id="setting-use-real-gallery">
+                                        <span class="kkt-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 商城互动设置 -->
+                        <div class="kkt-group" style="margin-top:15px;">
+                            <div class="kkt-item">
+                                <div class="kkt-item-label">启用商城互动</div>
+                                <div class="kkt-item-control">
+                                    <label class="kkt-switch">
+                                        <input type="checkbox" id="setting-shop-interaction-enabled">
+                                        <span class="kkt-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 视频通话设置 -->
+                        <div class="kkt-group" style="margin-top:15px;">
+                            <div class="kkt-item">
+                                <div class="kkt-item-label">允许角色主动发起通话</div>
+                                <div class="kkt-item-control">
+                                    <label class="kkt-switch">
+                                        <input type="checkbox" id="setting-video-call-enabled">
                                         <span class="kkt-slider"></span>
                                     </label>
                                 </div>
@@ -1705,7 +1877,7 @@
                         <div class="kkt-item">
                             <div class="kkt-item-label">最大记忆轮数</div>
                             <div class="kkt-item-control">
-                                <input type="number" id="setting-group-max-memory" value="10" min="1" style="width:50px; text-align:right; border:none;">
+                                <input type="number" id="setting-group-max-memory" value="100" min="1" style="width:50px; text-align:right; border:none;">
                             </div>
                         </div>
                         <div class="kkt-item">
@@ -1859,14 +2031,24 @@
                 <h1 class="title">回忆日记</h1>
             </div>
             <div class="action-btn-group">
+                <button class="action-btn" id="journal-manage-btn" title="管理日记">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
+                        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/>
+                    </svg>
+                </button>
+                <button class="action-btn" id="journal-cancel-manage-btn" title="取消" style="display: none; font-size: 14px; width: auto; padding: 0 8px;">
+                    取消
+                </button>
                 <button class="action-btn" id="bind-journal-worldbook-btn" title="绑定世界书">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                        <path d="M17 7h-4v2h4c1.65 0 3 1.35 3 3s-1.35 3-3 3h-4v2h4c2.76 0 5-2.24 5-5s-2.24-5-5-5zm-6 8H7c-1.65 0-3-1.35-3-3s1.35-3 3-3h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-2zm-3-4h8v2H8v-2z"></path>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                     </svg>
                 </button>
                 <button class="action-btn" id="generate-new-journal-btn" title="生成新日记">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
                 </button>
             </div>
@@ -1880,6 +2062,15 @@
                 <p>点击右上角的“+号”来创建第一篇吧！</p>
             </div>
         </main>
+        
+        <!-- 日记多选操作栏 -->
+        <div id="journal-multi-select-bar" style="display: none;">
+            <span id="journal-select-count">已选 0 篇</span>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-danger btn-small" id="journal-batch-delete-btn">删除</button>
+                <button class="btn btn-primary btn-small" id="journal-merge-btn">合并精简</button>
+            </div>
+        </div>
     </div>
 
     <!-- Memory Journal Detail Screen -->
@@ -2097,6 +2288,199 @@
             </div>
         </div>
     </div>
+
+    <!-- Video Call Screens & Modals -->
+    
+    <!-- SCENE 1: 加载/连线界面 -->
+    <div id="vc-scene-loading" class="vc-scene vc-hidden">
+        <div class="vc-center-wrapper">
+            <div class="vc-connection-wrapper">
+                <!-- AI -->
+                <div class="vc-avatar-box">
+                    <div class="vc-avatar ai" id="vc-loading-char-avatar"></div>
+                    <div class="vc-avatar-label" id="vc-loading-char-name" style="color:var(--vc-ai-color)">AI</div>
+                </div>
+
+                <!-- 信号桥 -->
+                <div class="vc-signal-bridge">
+                    <svg class="vc-ekg-svg" viewBox="0 0 100 40" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="vcSignalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:var(--vc-ai-color); stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:var(--vc-user-color); stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <path class="vc-ekg-line" d="M0,20 L10,20 L15,5 L20,35 L25,20 L40,20 L45,10 L50,30 L55,20 L75,20 L80,5 L85,35 L90,20 L100,20" />
+                        <path class="vc-ekg-line ghost" d="M0,20 L10,20 L15,8 L20,32 L25,20 L40,20 L45,12 L50,28 L55,20 L75,20 L80,8 L85,32 L90,20 L100,20" />
+                    </svg>
+                </div>
+
+                <!-- User -->
+                <div class="vc-avatar-box">
+                    <div class="vc-avatar user" id="vc-loading-user-avatar"></div>
+                    <div class="vc-avatar-label" style="color:var(--vc-user-color)">YOU</div>
+                </div>
+            </div>
+
+            <!-- 状态文字区 -->
+            <div class="vc-status-display">
+                <div class="vc-status-text" id="vc-status-main">正在建立通话专线...</div>
+                <div class="vc-sub-status" id="vc-status-sub">HANDSHAKE_INIT</div>
+            </div>
+        </div> 
+
+        <!-- 底部：按钮放在外面，保持在屏幕底部 -->
+        <div class="vc-loading-footer">
+            <div class="vc-c-btn vc-btn-hangup" id="vc-loading-hangup-btn">
+                <div class="vc-c-icon-box">
+                    <div class="vc-icon-hangup"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 2: 通话界面 -->
+    <div id="vc-scene-call" class="vc-scene vc-hidden">
+        <div class="vc-call-header">
+            <div class="vc-contact-info">
+                <div class="name" id="vc-call-name">Unknown</div>
+                <div class="time" id="vc-call-timer">00:00:00</div>
+            </div>
+            <div class="vc-header-avatar" id="vc-call-avatar">
+                <div class="vc-online-dot"></div>
+            </div>
+        </div>
+
+        <div class="vc-chat-area" id="vc-chat-container">
+            <!-- 自动插入的第一条消息 -->
+        </div>
+
+        <div class="vc-controls-wrapper">
+            <div class="vc-controls">
+                <div class="vc-c-btn" id="vc-camera-toggle-btn">
+                    <div class="vc-c-icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-camera-video" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z"/>
+                        </svg>
+                    </div>
+                    <span class="vc-c-label">Camera</span>
+                </div>
+                <div class="vc-c-btn" id="vc-action-voice-btn">
+                     <div class="vc-c-icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-mic" viewBox="0 0 16 16">
+                            <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z"/>
+                        </svg>
+                     </div>
+                    <span class="vc-c-label">Speak</span>
+                </div>
+                <div class="vc-c-btn vc-btn-hangup" id="vc-call-hangup-btn">
+                     <div class="vc-c-icon-box"><div class="vc-icon-hangup"></div></div>
+                    <span class="vc-c-label">End</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 通话输入框覆盖层 -->
+        <div id="vc-input-overlay" class="vc-input-overlay" style="display: none;">
+            <div class="vc-input-box">
+                <input type="text" id="vc-input-text" placeholder="输入你想说的话..." autocomplete="off">
+                <button id="vc-input-help-btn" title="使用说明">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call Type Selection Modal -->
+    <div id="vc-type-modal" class="vc-type-modal">
+        <div class="vc-type-sheet">
+            <div class="vc-type-header">
+                <span class="vc-type-title">发起通话</span>
+                <button class="vc-type-close" id="vc-type-close-btn">×</button>
+            </div>
+            
+            <button class="vc-type-btn video" id="vc-start-video-btn">
+                <div class="vc-type-icon">📹</div>
+                <div class="vc-type-info">
+                    <span class="vc-type-label">视频通话</span>
+                    <span class="vc-type-desc">沉浸式视觉体验</span>
+                </div>
+            </button>
+            
+            <button class="vc-type-btn voice" id="vc-start-voice-btn">
+                <div class="vc-type-icon">📞</div>
+                <div class="vc-type-info">
+                    <span class="vc-type-label">语音通话</span>
+                    <span class="vc-type-desc">仅声音交流</span>
+                </div>
+            </button>
+            
+            <button class="vc-type-btn history" id="vc-history-btn">
+                <div class="vc-type-icon">📜</div>
+                <div class="vc-type-info">
+                    <span class="vc-type-label">通话记录</span>
+                    <span class="vc-type-desc">查看过往记录</span>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Call History Modal -->
+    <div id="vc-history-modal" class="vc-type-modal">
+        <div class="vc-type-sheet" style="height: 70vh;">
+            <div class="vc-type-header">
+                <span class="vc-type-title">通话记录</span>
+                <button class="vc-type-close" id="vc-history-close-btn">×</button>
+            </div>
+            <div id="vc-history-list" class="vc-history-list">
+                <!-- JS populated -->
+                <div class="vc-history-empty">暂无通话记录</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call Detail Modal -->
+    <div id="vc-detail-modal" class="vc-type-modal">
+        <div class="vc-type-sheet" style="height: 80vh;">
+            <div class="vc-type-header">
+                <button class="vc-type-close" id="vc-detail-back-btn" style="font-size: 18px;">‹ 返回</button>
+                <span class="vc-type-title">通话详情</span>
+                <button class="vc-type-close" id="vc-detail-close-btn">×</button>
+            </div>
+            <div id="vc-detail-content" class="vc-detail-content">
+                <!-- JS populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Incoming Call Notification (iOS Style) -->
+    <div id="vc-incoming-modal" class="vc-incoming-overlay">
+        <div class="vc-incoming-banner">
+            <div class="vc-incoming-content">
+                <div class="vc-incoming-avatar" id="vc-incoming-avatar"></div>
+                <div class="vc-incoming-info">
+                    <div class="vc-incoming-name" id="vc-incoming-name">Unknown</div>
+                    <div class="vc-incoming-type" id="vc-incoming-type">视频通话邀请...</div>
+                </div>
+            </div>
+            <div class="vc-incoming-actions">
+                <button class="vc-incoming-btn reject" id="vc-incoming-reject-btn">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"/></svg>
+                </button>
+                <button class="vc-incoming-btn accept" id="vc-incoming-accept-btn">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Window (Mini Mode) -->
+    <div id="vc-floating-window" class="vc-floating-window" style="display: none;">
+        <div class="vc-float-avatar" id="vc-float-avatar"></div>
+        <div class="vc-float-timer" id="vc-float-timer">00:00</div>
+    </div>
+
     <!-- New Peek Wallpaper Modal -->
     <div id="peek-wallpaper-modal" class="modal-overlay">
         <div class="modal-window" style="max-height: 80vh; overflow-y: auto;">
@@ -2203,6 +2587,140 @@
             </div>
         </div>
     </main>
+</div>
+
+<!-- Shop Screen -->
+<div id="shop-screen" class="screen">
+    <header class="app-header">
+        <button class="back-btn" data-target="chat-room-screen">‹</button>
+        <div class="title-container">
+            <h1 class="title">商城</h1>
+        </div>
+        <div class="action-btn-group">
+            <button class="action-btn" id="shop-refresh-btn" title="重新进货">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 22px; height: 22px;">
+                    <path d="M23 4v6h-6"></path>
+                    <path d="M1 20v-6h6"></path>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+            </button>
+            <button class="action-btn" id="shop-more-btn" title="更多">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px;">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+    <div class="shop-tabs"></div>
+    <main class="content" id="shop-content-container"></main>
+    <div id="shop-delivery-modal" class="modal-overlay">
+        <div class="modal-window">
+            <h3 id="shop-delivery-item-name">确认订单</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">请选择配送方式：</p>
+            <div class="delivery-options">
+                <div class="delivery-option-card active" data-type="timed" onclick="selectDeliveryOption('timed')">
+                    <div class="delivery-icon">🛵</div>
+                    <div class="delivery-info">
+                        <div class="delivery-title">定时送达</div>
+                        <div class="delivery-desc">预计 30 分钟内送达</div>
+                    </div>
+                    <div class="delivery-check"></div>
+                </div>
+                <div class="delivery-option-card" data-type="instant" onclick="selectDeliveryOption('instant')">
+                    <div class="delivery-icon">⚡</div>
+                    <div class="delivery-info">
+                        <div class="delivery-title">即时送达</div>
+                        <div class="delivery-desc">加急配送，立即送出</div>
+                    </div>
+                    <div class="delivery-check"></div>
+                </div>
+                <div class="delivery-option-card" data-type="pickup" onclick="selectDeliveryOption('pickup')">
+                    <div class="delivery-icon">🏪</div>
+                    <div class="delivery-info">
+                        <div class="delivery-title">门店自提</div>
+                        <div class="delivery-desc">凭口令到店领取</div>
+                    </div>
+                    <div class="delivery-check"></div>
+                </div>
+                <div class="delivery-option-card" data-type="pay-for-me" onclick="selectDeliveryOption('pay-for-me')">
+                    <div class="delivery-icon">🥺</div>
+                    <div class="delivery-info">
+                        <div class="delivery-title">让Ta买单</div>
+                        <div class="delivery-desc">发送代付请求</div>
+                    </div>
+                    <div class="delivery-check"></div>
+                </div>
+            </div>
+            
+            <div id="pickup-code-input-container" style="display: none; margin-top: 15px;">
+                <label style="font-size: 12px; color: #666; display: block; margin-bottom: 5px;">自提口令</label>
+                <input type="text" id="shop-pickup-code" placeholder="输入取货码/口令" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; outline: none;">
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button id="shop-delivery-confirm" class="btn btn-primary" style="flex: 1;">确认下单</button>
+                <button id="shop-delivery-cancel" class="btn btn-neutral" style="flex: 1;">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shop More ActionSheet -->
+    <div id="shop-more-actionsheet" class="action-sheet-overlay">
+        <div class="action-sheet">
+            <button class="action-sheet-button" id="shop-pickup-btn">🎁 提取商品 (输入口令)</button>
+            <button class="action-sheet-button" id="shop-category-manage-btn">🏷️ 自定义分类</button>
+            <button class="action-sheet-button danger" id="shop-more-cancel-btn">取消</button>
+        </div>
+    </div>
+
+    <!-- Shop Category Manage Modal -->
+    <div id="shop-category-manage-modal" class="modal-overlay">
+        <div class="modal-window" style="max-height: 85vh; overflow-y: auto;">
+            <h3>商城分类管理</h3>
+            <div style="font-size: 12px; color: #666; margin-bottom: 10px; background: #f9f9f9; padding: 8px; border-radius: 6px;">
+                添加自定义分类后，下次进货时 AI 将会根据你的提示词生成对应商品。
+            </div>
+
+            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
+                <label for="shop-item-count" style="margin: 0;">每个分类生成数量</label>
+                <input type="number" id="shop-item-count" value="8" min="1" max="20" style="width: 60px; text-align: center;">
+            </div>
+            
+            <div id="shop-category-list" style="margin-bottom: 15px; border: 1px solid #eee; border-radius: 8px; padding: 10px; min-height: 100px;">
+                <!-- JS populated list -->
+            </div>
+
+            <div class="form-group" style="border-top: 1px solid #eee; padding-top: 15px;">
+                <label style="font-weight: bold; margin-bottom: 10px; display: block;">添加新分类</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <input type="text" id="shop-cat-id" placeholder="英文id (如: flower)" style="flex: 1; min-width: 0;" required>
+                    <input type="text" id="shop-cat-name" placeholder="显示名称 (如: 🌸 花)" style="flex: 1; min-width: 0;" required>
+                </div>
+                <textarea id="shop-cat-prompt" rows="2" placeholder="简短的提示词：描述这个分类下应该卖什么商品..." style="width: 100%; margin-bottom: 10px;" required></textarea>
+                <button id="shop-add-category-btn" class="btn btn-secondary" style="width: 100%;">+ 添加分类</button>
+            </div>
+            
+            <div style="margin-top: 10px; text-align: right;">
+                <button id="shop-category-close-btn" class="btn btn-primary" style="width: 100%;">完成</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shop Pickup Modal -->
+    <div id="shop-pickup-modal" class="modal-overlay">
+        <div class="modal-window">
+            <h3>提取商品</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 15px;">请输入订单中的自提口令或暗号：</p>
+            <div class="form-group">
+                <input type="text" id="shop-pickup-input" placeholder="例如：888888 或 汪汪汪" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 16px; text-align: center;">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button id="shop-pickup-confirm" class="btn btn-primary" style="flex: 1;">确认提取</button>
+                <button id="shop-pickup-cancel" class="btn btn-neutral" style="flex: 1;">取消</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Pomodoro Settings Modal -->
@@ -2322,6 +2840,14 @@
         </div>
     </div>
 </div>
+
+<!-- Full Image Viewer Modal -->
+<div id="full-image-modal" class="modal-overlay" style="z-index: 20000; background: rgba(0,0,0,0.95);">
+    <div class="modal-window" style="background: transparent; box-shadow: none; width: 100%; height: 100%; max-width: none; padding: 0; display: flex; align-items: center; justify-content: center; position: relative;">
+        <img id="full-image-view" src="" style="max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.3s ease;">
+        <button id="close-full-image-btn" style="position: absolute; top: 40px; right: 20px; background: rgba(255,255,255,0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);">×</button>
+    </div>
+</div>
  
 <!-- Polaroid Customization Modal -->
 <div id="heart-photo-modal" class="modal-overlay">
@@ -2380,38 +2906,83 @@
                 <label for="journal-range-end">结束消息 (序号)</label>
                 <input type="number" id="journal-range-end" placeholder="例如：100" required>
             </div>
+            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; margin-top: 15px;">
+                <label for="journal-include-favorited" style="font-size: 14px; color: #555;">参考已收藏的日记</label>
+                <label class="kkt-switch">
+                    <input type="checkbox" id="journal-include-favorited">
+                    <span class="kkt-slider"></span>
+                </label>
+            </div>
             <button type="submit" class="btn btn-primary">生成</button>
         </form>
     </div>
 </div>
 
-<!-- Journal World Book Selection Modal -->
-<div id="journal-worldbook-selection-modal" class="modal-overlay">
-    <div class="modal-window">
-        <h3>为日记绑定世界书</h3>
-        <ul id="journal-worldbook-selection-list" class="list-container" style="max-height: 40vh; overflow-y: auto; padding: 0; margin: 15px 0;">
-            <!-- World book items will be rendered here -->
-        </ul>
-        <button class="btn btn-primary" id="save-journal-worldbook-selection-btn" style="margin-top: 20px;">确认</button>
+<!-- Journal Style Selection Modal -->
+<div id="journal-style-selection-modal" class="modal-overlay">
+    <div class="modal-window" style="max-height: 80vh; display: flex; flex-direction: column;">
+        <h3>日记风格设置</h3>
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 10px; color: var(--primary-color);">选择风格模式</label>
+            <div class="radio-group-vertical" style="display: flex; flex-direction: column; gap: 10px;">
+                <label class="radio-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="radio" name="journal-style-mode" value="default" checked>
+                    <span>默认风格 (第一人称流水账)</span>
+                </label>
+                <label class="radio-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="radio" name="journal-style-mode" value="summary">
+                    <span>摘要总结 (第三人称客观记录)</span>
+                </label>
+                <label class="radio-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="radio" name="journal-style-mode" value="custom">
+                    <span>自定义 (使用世界书定义风格)</span>
+                </label>
+            </div>
+        </div>
+        
+        <div id="journal-custom-style-container" style="display: none; flex: 1; min-height: 200px; flex-direction: column; margin-top: 10px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 10px; font-size: 14px; color: #666;">选择作为风格定义的世界书</label>
+            <ul id="journal-style-worldbook-list" class="list-container" style="flex: 1; overflow-y: auto; padding: 0; margin: 0; border: 1px solid #eee; border-radius: 8px; padding: 5px;">
+                <!-- World book items will be rendered here -->
+            </ul>
+        </div>
+
+        <p style="font-size: 12px; color: #999; margin-top: 10px; text-align: center;">* 生成时会自动包含聊天室绑定的通用世界书作为背景</p>
+
+        <button class="btn btn-primary" id="save-journal-style-btn" style="margin-top: 10px;">保存设置</button>
     </div>
 </div>
 
 <!-- NEW: Delete History Chunk Modals -->
 <div id="delete-chunk-modal" class="modal-overlay">
-    <div class="modal-window">
-        <h3>删除指定范围记录</h3>
-        <form id="delete-chunk-form">
-            <div id="delete-chunk-range-info" style="font-size: 12px; color: #888; text-align: center; margin-bottom: 15px;"></div>
-            <div class="form-group">
-                <label for="delete-range-start">起始消息 (序号)</label>
-                <input type="number" id="delete-range-start" placeholder="例如：1" required>
+    <div class="modal-window" style="max-height: 80vh; display: flex; flex-direction: column;">
+        <h3>记录管理</h3>
+        <div id="delete-chunk-range-info" style="font-size: 12px; color: #888; text-align: center; margin-bottom: 5px;"></div>
+        <div id="delete-chunk-hidden-info" style="font-size: 12px; color: #d32f2f; text-align: center; margin-bottom: 15px; min-height: 18px;"></div>
+        
+        <form id="delete-chunk-form" onsubmit="event.preventDefault();">
+            <div style="display: flex; gap: 10px;">
+                <div class="form-group" style="flex: 1;">
+                    <label for="delete-range-start">起始序号</label>
+                    <input type="number" id="delete-range-start" placeholder="1" required>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label for="delete-range-end">结束序号</label>
+                    <input type="number" id="delete-range-end" placeholder="100" required>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="delete-range-end">结束消息 (序号)</label>
-                <input type="number" id="delete-range-end" placeholder="例如：100" required>
-            </div>
-            <button type="submit" class="btn btn-primary">下一步</button>
         </form>
+
+        <div id="delete-chunk-preview-box" style="flex: 1; overflow-y: auto; background: #f9f9f9; border-radius: 8px; padding: 10px; margin: 10px 0; font-size: 12px; line-height: 1.5; min-height: 100px; border: 1px solid #eee;">
+            <p style="color: #999; text-align: center; margin-top: 30px;">输入范围以预览内容</p>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button id="btn-block-range" class="btn btn-neutral" style="flex: 1; font-size: 13px;">🚫 屏蔽</button>
+            <button id="btn-restore-range" class="btn btn-neutral" style="flex: 1; font-size: 13px;">✅ 恢复</button>
+            <button id="btn-delete-range" class="btn btn-danger" style="flex: 1; font-size: 13px;">🗑️ 删除</button>
+        </div>
+        <button id="close-delete-modal-btn" class="btn btn-neutral" style="margin-top: 10px; width: 100%;">关闭</button>
     </div>
 </div>
 
@@ -2433,13 +3004,15 @@
 
 <div id="delete-chunk-confirm-modal" class="modal-overlay">
     <div class="modal-window">
-        <h3>确认删除</h3>
-        <p>将永久删除以下范围的消息，此操作不可撤销！</p>
-        <div id="delete-chunk-preview" style="max-height: 200px; overflow-y: auto; background: #f5f5f5; border-radius: 8px; padding: 10px; margin: 15px 0; font-size: 12px; line-height: 1.5;">
-            <!-- Preview will be inserted here -->
-        </div>
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button id="confirm-delete-chunk-btn" class="btn btn-danger" style="flex: 1;">永久删除</button>
+        <h3>⚠️ 极度危险</h3>
+        <p style="margin: 15px 0; line-height: 1.6; color: #d32f2f; font-weight: bold;">
+            您即将永久删除选定范围内的聊天记录。<br>
+            此操作不可撤销！
+        </p>
+        <p style="font-size: 13px; color: #666;">如果只是不想让 AI 读取这些记录，建议使用“屏蔽”功能。</p>
+        
+        <div style="display: flex; gap: 10px; margin-top: 25px;">
+            <button id="confirm-delete-chunk-btn" class="btn btn-danger" style="flex: 1;">确认删除</button>
             <button id="cancel-delete-chunk-btn" class="btn btn-neutral" style="flex: 1;">取消</button>
         </div>
     </div>
@@ -2496,7 +3069,29 @@
     <!-- Character Gallery Modal -->
     <div id="char-gallery-modal" class="modal-overlay">
         <div class="modal-window" style="max-height: 80vh; display: flex; flex-direction: column;">
-            <h3>角色相册管理</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0;">角色相册管理</h3>
+                <div class="gallery-actions" style="display: flex; gap: 8px;">
+                    <button id="add-gallery-item-btn" class="icon-btn-simple" title="添加图片">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    </button>
+                    <button id="batch-add-gallery-btn" class="icon-btn-simple" title="批量导入">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                    </button>
+                    <div style="width: 1px; background: #eee; margin: 0 4px;"></div>
+                    <button id="load-gallery-preset-btn" class="icon-btn-simple" title="加载预设">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M4 15h2v3h12v-3h2v3c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2m4.41-7.59L11 7.83V1h2v6.83l2.59-2.58L17 6.66l-5 5-5-5 1.41-1.41z"/></svg>
+                    </button>
+                    <button id="save-gallery-preset-btn" class="icon-btn-simple" title="存为预设">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+                    </button>
+                    <div style="width: 1px; background: #eee; margin: 0 4px;"></div>
+                    <button id="export-gallery-btn" class="icon-btn-simple" title="导出相册">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                    </button>
+                </div>
+            </div>
+            
             <div style="font-size: 12px; color: #666; margin-bottom: 10px; background: #f9f9f9; padding: 8px; border-radius: 6px;">
                 此处添加的照片将作为角色的“真实相册”。<br>
                 开启“真实相册匹配”后，当 AI 发送的 [照片/视频：内容] 中的“内容”与相册中的【图片名称】匹配时，将直接显示图片。
@@ -2506,15 +3101,37 @@
                 <!-- JS populated list -->
                 <p class="placeholder-text" style="text-align: center; color: #999; margin-top: 20px;">相册空空如也~</p>
             </div>
-
-            <div class="gallery-controls">
-                <button id="add-gallery-item-btn" class="btn btn-primary btn-small" style="width: 100%; margin-bottom: 8px;">+ 添加单张图片</button>
-                <button id="batch-add-gallery-btn" class="btn btn-secondary btn-small" style="width: 100%;">批量导入</button>
-                <button id="export-gallery-btn" class="btn btn-neutral btn-small" style="width: 100%; margin-top: 8px;">导出相册</button>
-            </div>
             
-            <div style="margin-top: 15px; text-align: right;">
+            <div style="margin-top: 5px; text-align: right;">
                 <button id="close-gallery-modal-btn" class="btn btn-neutral">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Presets Modal -->
+    <div id="gallery-presets-modal" class="modal-overlay" style="z-index: 10002;">
+        <div class="modal-window" style="max-width: 520px;">
+            <h3 style="margin: 0 0 15px 0;">相册预设库</h3>
+            <div id="gallery-presets-list" style="max-height: 340px; overflow: auto; margin-bottom: 15px; border: 1px solid #f0f0f0; padding: 8px; border-radius: 6px; min-height: 100px;">
+                <!-- JS populated -->
+            </div>
+            <div style="display: flex; justify-content: flex-end;">
+                <button id="close-gallery-presets-modal" class="btn btn-primary">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Gallery Preset Modal -->
+    <div id="save-gallery-preset-modal" class="modal-overlay" style="z-index: 10002;">
+        <div class="modal-window">
+            <h3>保存为预设</h3>
+            <div class="form-group">
+                <label>预设名称</label>
+                <input type="text" id="gallery-preset-name-input" placeholder="例如：通用风景图" required>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button id="confirm-save-gallery-preset-btn" class="btn btn-primary" style="flex: 1;">保存</button>
+                <button id="cancel-save-gallery-preset-btn" class="btn btn-neutral" style="flex: 1;">取消</button>
             </div>
         </div>
     </div>
@@ -2687,7 +3304,14 @@
 
 <!-- [2. 核心交互层] -->
 <script src="js/ui.js"></script>       <!-- UI交互：界面切换、主屏幕逻辑、右键菜单 -->
-<script src="js/chat.js"></script>     <!-- 聊天核心：消息发送/接收、AI接口调用、聊天列表 -->
+<!-- Chat Modules -->
+<script src="js/modules/chat_list.js"></script>
+<script src="js/modules/character_import.js"></script>
+<script src="js/modules/chat_render.js"></script>
+<script src="js/modules/chat_ai.js"></script>
+<script src="js/modules/chat_features.js"></script>
+<script src="js/modules/chat_ops.js"></script>
+<script src="js/chat.js"></script>     <!-- 聊天核心入口 -->
 <script src="js/group_chat.js"></script> <!-- 群聊系统：群聊管理、设置、Prompt生成 -->
 <script src="js/contacts.js"></script> <!-- 联系人：好友列表、名片 -->
 <script src="js/settings.js"></script> <!-- 设置管理：API设置、外观自定义、预设管理 -->
@@ -2707,6 +3331,9 @@
 <script src="js/modules/battery_interaction.js"></script> <!-- 电量交互模块 -->
 <script src="js/modules/gallery.js"></script> <!-- 角色相册管理模块 -->
 <script src="js/modules/live.js"></script>    <!-- 直播间模块 -->
+<script src="js/modules/shop.js"></script>    <!-- 商城模块 -->
+<script src="js/modules/cot_settings.js"></script> <!-- 思维链设置模块 -->
+<script src="js/modules/video_call.js"></script> <!-- 视频通话模块 -->
 
 <!-- [4. 程序入口] -->
 <script src="js/main.js"></script>     <!-- 主入口：初始化(init)、全局事件监听 -->
