@@ -3,20 +3,34 @@
 function setupGalleryManagement() {
     const galleryModal = document.getElementById('char-gallery-modal');
     const closeGalleryBtn = document.getElementById('close-gallery-modal-btn');
+    
+    // 顶部工具栏按钮
     const addGalleryBtn = document.getElementById('add-gallery-item-btn');
     const batchAddBtn = document.getElementById('batch-add-gallery-btn');
+    const exportGalleryBtn = document.getElementById('export-gallery-btn');
+    const savePresetBtn = document.getElementById('save-gallery-preset-btn');
+    const loadPresetBtn = document.getElementById('load-gallery-preset-btn');
     
+    // 单个添加/编辑模态框
     const itemModal = document.getElementById('gallery-item-modal');
     const itemForm = document.getElementById('gallery-item-form');
     const cancelItemBtn = document.getElementById('cancel-gallery-item-btn');
     
+    // 批量添加模态框
     const batchModal = document.getElementById('batch-gallery-modal');
     const batchTextarea = document.getElementById('batch-gallery-textarea');
     const confirmBatchBtn = document.getElementById('confirm-batch-gallery-btn');
     const cancelBatchBtn = document.getElementById('cancel-batch-gallery-btn');
-    const exportGalleryBtn = document.getElementById('export-gallery-btn');
     const importGalleryFileBtn = document.getElementById('import-gallery-file-btn');
     const batchGalleryFileInput = document.getElementById('batch-gallery-file-input');
+
+    // 预设相关模态框
+    const presetsModal = document.getElementById('gallery-presets-modal');
+    const closePresetsBtn = document.getElementById('close-gallery-presets-modal');
+    const savePresetModal = document.getElementById('save-gallery-preset-modal');
+    const confirmSavePresetBtn = document.getElementById('confirm-save-gallery-preset-btn');
+    const cancelSavePresetBtn = document.getElementById('cancel-save-gallery-preset-btn');
+    const presetNameInput = document.getElementById('gallery-preset-name-input');
 
     // 暴露给全局的打开函数
     window.openGalleryManager = () => {
@@ -186,8 +200,6 @@ function setupGalleryManagement() {
         
         lines.forEach(line => {
             // 支持 "名称:URL" 或 "名称:URL" (中文冒号)
-            // 如果是 "名称:描述:URL"，取第一段做名称，最后一段做URL（虽然目前没存描述，但做个简单解析）
-            // 简单起见，按第一个冒号分割
             const parts = line.split(/[:：]/);
             if (parts.length >= 2) {
                 const name = parts[0].trim();
@@ -210,6 +222,48 @@ function setupGalleryManagement() {
         batchModal.classList.remove('visible');
         showToast(`成功导入 ${count} 张图片`);
     });
+
+    // --- 预设管理逻辑 ---
+
+    // 保存预设
+    if (savePresetBtn) savePresetBtn.addEventListener('click', () => {
+        const char = db.characters.find(c => c.id === currentChatId);
+        if (!char || !char.gallery || char.gallery.length === 0) {
+            return showToast('相册为空，无法保存预设');
+        }
+        presetNameInput.value = '';
+        savePresetModal.classList.add('visible');
+    });
+
+    if (cancelSavePresetBtn) cancelSavePresetBtn.addEventListener('click', () => savePresetModal.classList.remove('visible'));
+
+    if (confirmSavePresetBtn) confirmSavePresetBtn.addEventListener('click', async () => {
+        const name = presetNameInput.value.trim();
+        if (!name) return showToast('请输入预设名称');
+        
+        const char = db.characters.find(c => c.id === currentChatId);
+        if (!char) return;
+
+        if (!db.galleryPresets) db.galleryPresets = [];
+        
+        db.galleryPresets.push({
+            id: `preset_${Date.now()}`,
+            name: name,
+            items: JSON.parse(JSON.stringify(char.gallery)) // 深拷贝
+        });
+        
+        await saveData();
+        savePresetModal.classList.remove('visible');
+        showToast('预设保存成功');
+    });
+
+    // 加载预设
+    if (loadPresetBtn) loadPresetBtn.addEventListener('click', () => {
+        renderGalleryPresets();
+        presetsModal.classList.add('visible');
+    });
+
+    if (closePresetsBtn) closePresetsBtn.addEventListener('click', () => presetsModal.classList.remove('visible'));
 }
 
 function renderGalleryList(char) {
@@ -259,6 +313,73 @@ function renderGalleryList(char) {
             preview.style.backgroundImage = `url(${item.url})`;
             preview.textContent = '';
             document.getElementById('gallery-item-modal').classList.add('visible');
+        });
+
+        container.appendChild(el);
+    });
+}
+
+function renderGalleryPresets() {
+    const container = document.getElementById('gallery-presets-list');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!db.galleryPresets || db.galleryPresets.length === 0) {
+        container.innerHTML = '<p class="placeholder-text" style="text-align: center; color: #999; margin-top: 20px;">暂无预设</p>';
+        return;
+    }
+
+    db.galleryPresets.forEach(preset => {
+        const el = document.createElement('div');
+        el.className = 'preset-item';
+        el.style.display = 'flex';
+        el.style.justifyContent = 'space-between';
+        el.style.alignItems = 'center';
+        el.style.padding = '10px';
+        el.style.borderBottom = '1px solid #eee';
+        
+        el.innerHTML = `
+            <div>
+                <div style="font-weight: 500;">${preset.name}</div>
+                <div style="font-size: 12px; color: #999;">${preset.items.length} 张图片</div>
+            </div>
+            <div style="display: flex; gap: 5px;">
+                <button class="btn btn-primary btn-small load-btn">加载</button>
+                <button class="btn btn-danger btn-small delete-btn">删除</button>
+            </div>
+        `;
+
+        el.querySelector('.load-btn').addEventListener('click', async () => {
+            if (confirm(`确定加载预设“${preset.name}”吗？`)) {
+                const char = db.characters.find(c => c.id === currentChatId);
+                if (!char) return;
+                if (!char.gallery) char.gallery = [];
+                
+                let count = 0;
+                preset.items.forEach(item => {
+                    // 去重：检查名称是否已存在
+                    if (!char.gallery.some(p => p.name === item.name)) {
+                        char.gallery.push({
+                            ...item,
+                            id: `pic_${Date.now()}_${Math.random().toString(36).substr(2, 5)}` // 重新生成ID
+                        });
+                        count++;
+                    }
+                });
+                
+                await saveData();
+                renderGalleryList(char);
+                document.getElementById('gallery-presets-modal').classList.remove('visible');
+                showToast(`成功导入 ${count} 张图片`);
+            }
+        });
+
+        el.querySelector('.delete-btn').addEventListener('click', async () => {
+            if (confirm(`确定删除预设“${preset.name}”吗？`)) {
+                db.galleryPresets = db.galleryPresets.filter(p => p.id !== preset.id);
+                await saveData();
+                renderGalleryPresets();
+            }
         });
 
         container.appendChild(el);

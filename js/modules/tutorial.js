@@ -47,15 +47,55 @@ function showUpdateModal() {
     const latestLog = updateLog[0];
     if (!latestLog) return;
 
+    // 优化内容渲染
+    let notesHtml = '<div style="text-align: left; max-height: 60vh; overflow-y: auto; padding-right: 5px;">';
+    latestLog.notes.forEach(note => {
+        // 处理加粗标记 **text** -> <b>text</b>
+        let formattedNote = note.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+
+        if (note.includes('————')) {
+            // 分割线
+            notesHtml += '<hr style="margin: 15px 0; border: 0; border-top: 1px dashed #ccc;">';
+        } else if (/^\d+\./.test(note)) {
+            // 标题行 (例如 "1.日记功能升级！")
+            notesHtml += `<h4 style="margin: 15px 0 8px; color: #333; font-size: 15px; font-weight: 600;">${formattedNote}</h4>`;
+        } else {
+            // 普通内容行
+            notesHtml += `<div style="margin-bottom: 6px; color: #555; font-size: 13px; line-height: 1.5; padding-left: 12px; position: relative;">
+                <span style="position: absolute; left: 0; top: 0; color: #999;">•</span>${formattedNote}
+            </div>`;
+        }
+    });
+    notesHtml += '</div>';
+
     contentEl.innerHTML = `
-        <h4>版本 ${latestLog.version} (${latestLog.date})</h4>
-        <ul>
-            ${latestLog.notes.map(note => `<li>${note}</li>`).join('')}
-        </ul>
+        <h3 style="margin-top: 0; margin-bottom: 15px; text-align: center;">版本 ${latestLog.version} (${latestLog.date})</h3>
+        ${notesHtml}
         <p style="font-size: 12px; color: #888; text-align: center; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">过往更新说明可在“教程”应用内查看。</p>
     `;
 
     modal.classList.add('visible');
+
+    // 强制阅读倒计时
+    const originalText = "我知道了";
+    let timeLeft = 10;
+    closeBtn.disabled = true;
+    closeBtn.textContent = `请阅读 (${timeLeft}s)`;
+    closeBtn.style.opacity = '0.6';
+    closeBtn.style.cursor = 'not-allowed';
+
+    const timer = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+            closeBtn.textContent = `请阅读 (${timeLeft}s)`;
+        } else {
+            clearInterval(timer);
+            closeBtn.disabled = false;
+            closeBtn.textContent = originalText;
+            closeBtn.style.opacity = '1';
+            closeBtn.style.cursor = 'pointer';
+        }
+    }, 1000);
 
     closeBtn.onclick = () => {
         modal.classList.remove('visible');

@@ -528,8 +528,52 @@ function renderPeekCart(items) {
     screen.querySelector('.action-btn').addEventListener('click', () => {
         generateAndRenderPeekContent('cart', { forceRefresh: true });
     });
-    screen.querySelector('.checkout-btn').addEventListener('click', () => {
-        showToast('功能开发中');
+    screen.querySelector('.checkout-btn').addEventListener('click', async () => {
+        const char = db.characters.find(c => c.id === currentChatId);
+        if (!char) return;
+
+        const cartItems = char.peekData?.cart?.items;
+        if (!cartItems || cartItems.length === 0) {
+            showToast('购物车是空的');
+            return;
+        }
+
+        let totalPrice = 0;
+        const itemsStrList = [];
+
+        cartItems.forEach(item => {
+            totalPrice += parseFloat(item.price);
+            itemsStrList.push(`${item.title} x1`);
+        });
+
+        const itemsStr = itemsStrList.join(', ');
+        const myName = char.myName;
+        const realName = char.realName;
+
+        // 清空购物车
+        char.peekData.cart.items = [];
+        await saveData();
+        
+        renderPeekCart([]);
+
+        // 跳转回聊天界面
+        switchScreen('chat-room-screen');
+
+        // 发送消息
+        const input = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-message-btn');
+
+        if (input && sendBtn) {
+            // 1. 发送系统提示
+            input.value = `[system-display:${myName}帮${realName}清空了ta的购物车]`;
+            sendBtn.click();
+
+            // 2. 延迟发送订单消息
+            setTimeout(() => {
+                input.value = `[${myName}为${realName}下单了：即时送达|${totalPrice.toFixed(2)}|${itemsStr}]`;
+                sendBtn.click();
+            }, 300);
+        }
     });
 }
 
@@ -544,9 +588,7 @@ function renderPeekTransferStation(entries) {
             messagesHtml += `
                 <div class="message-wrapper sent">
                     <div class="message-bubble-row">
-                        <div class="message-bubble sent" style="background-color: #98E165; color: #000;">
-                            ${entry}
-                        </div>
+                        <div class="message-bubble sent" style="background-color: #98E165; color: #000;">${entry}</div>
                     </div>
                 </div>
             `;
@@ -925,7 +967,10 @@ async function generateAndRenderPeekContent(appType, options = {}) {
    }
 
     try {
-        const mainChatContext = char.history.slice(-10).map(m => m.content).join('\n');
+        let historySlice = char.history.slice(-10);
+        historySlice = filterHistoryForAI(char, historySlice);
+        const mainChatContext = historySlice.map(m => m.content).join('\n');
+
         const systemPrompt = generatePeekContentPrompt(char, appType, mainChatContext);
         
         const requestBody = {
@@ -938,24 +983,7 @@ async function generateAndRenderPeekContent(appType, options = {}) {
         const endpoint = `${url}/v1/chat/completions`;
         const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` };
 
-        const response = await fetch(endpoint, { method: 'POST', headers: headers, body: JSON.stringify(requestBody) });
-        const responseText = await response.text();
-
-        if (!response.ok) {
-            const error = new Error(`API Error: ${response.status} ${responseText}`);
-            error.response = response;
-            throw error;
-        }
-        
-        let result;
-        try {
-            result = JSON.parse(responseText);
-        } catch (e) {
-            console.error("Failed to parse JSON:", responseText);
-            throw new Error(`API返回了非JSON格式数据 (可能是网页HTML)。请检查API地址是否正确。原始内容开头: ${responseText.substring(0, 50)}...`);
-        }
-
-        const contentStr = result.choices[0].message.content;
+        const contentStr = await fetchAiResponse(db.apiSettings, requestBody, headers, endpoint);
         
         const jsonMatch = contentStr.match(/\{[\s\S]*\}/);
         if (!jsonMatch) throw new Error("AI响应中未找到有效的JSON对象。");

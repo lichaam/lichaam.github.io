@@ -275,51 +275,126 @@ async function setupStickerSystem() {
 
 function renderStickerCategories() {
     const bar = document.getElementById('sticker-category-bar');
+    
+    // 保存搜索状态
+    const existingSearchInput = document.getElementById('sticker-search-input');
+    const searchValue = existingSearchInput ? existingSearchInput.value : '';
+    const isSearchExpanded = existingSearchInput && (existingSearchInput.value || document.activeElement === existingSearchInput || existingSearchInput.closest('.sticker-search-tag.expanded'));
+
     bar.innerHTML = '';
 
     const groups = [...new Set(db.myStickers.map(s => s.group).filter(g => g))];
     
-    const categories = [
-        { id: 'recent', name: '最近使用' },
-        { id: 'all', name: '全部' },
-        ...groups.map(g => ({ id: g, name: g })),
-        { id: 'ungrouped', name: '未分类' }
-    ];
+    // 1. 最近使用
+    createCategoryItem(bar, { id: 'recent', name: '最近使用' });
 
-    categories.forEach(cat => {
-        const item = document.createElement('div');
-        item.className = `sticker-category-item ${currentStickerCategory === cat.id ? 'active' : ''}`;
-        item.textContent = cat.name;
-        item.dataset.category = cat.id;
-        bar.appendChild(item);
+    // 2. 搜索 Tag (插入在中间)
+    const searchTag = document.createElement('div');
+    searchTag.className = `sticker-category-item sticker-search-tag ${isSearchExpanded ? 'expanded' : ''}`;
+    searchTag.innerHTML = `
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="sticker-search-input" class="sticker-search-input" placeholder="搜索..." value="${searchValue}" autocomplete="off">
+    `;
+    
+    const input = searchTag.querySelector('input');
+    
+    // 阻止 input 上的事件冒泡，防止被外层容器拦截（解决无法输入问题）
+    ['mousedown', 'click', 'touchstart'].forEach(eventType => {
+        input.addEventListener(eventType, (e) => {
+            e.stopPropagation();
+        });
     });
+
+    // 点击 Tag 展开/收起
+    searchTag.addEventListener('click', (e) => {
+        // 如果点击的是 input，不要触发收起逻辑，保持聚焦
+        if (e.target === input) {
+            return;
+        }
+        
+        if (searchTag.classList.contains('expanded')) {
+            // 已展开 -> 收起
+            searchTag.classList.remove('expanded');
+            input.value = ''; // 清空内容
+            input.blur(); // 移除焦点
+            renderStickerGrid(); // 恢复显示所有表情
+        } else {
+            // 未展开 -> 展开
+            searchTag.classList.add('expanded');
+            // 稍微延迟聚焦，确保 CSS 动画开始，解决部分设备无法输入的问题
+            setTimeout(() => input.focus(), 50);
+        }
+    });
+
+    // 输入事件
+    input.addEventListener('input', (e) => {
+        renderStickerGrid(e.target.value); 
+    });
+
+    // 失去焦点且为空时收起
+    input.addEventListener('blur', (e) => {
+        if (!e.target.value) {
+            searchTag.classList.remove('expanded');
+            // 恢复当前分类显示
+            renderStickerGrid();
+        }
+    });
+    
+    bar.appendChild(searchTag);
+
+    // 3. 全部
+    createCategoryItem(bar, { id: 'all', name: '全部' });
+
+    // 4. 其他分组
+    groups.forEach(g => createCategoryItem(bar, { id: g, name: g }));
+    createCategoryItem(bar, { id: 'ungrouped', name: '未分类' });
 }
 
-function renderStickerGrid() {
+function createCategoryItem(container, cat) {
+    const item = document.createElement('div');
+    item.className = `sticker-category-item ${currentStickerCategory === cat.id ? 'active' : ''}`;
+    item.textContent = cat.name;
+    item.dataset.category = cat.id;
+    container.appendChild(item);
+}
+
+function renderStickerGrid(searchQuery = '') {
     const container = document.getElementById('sticker-grid-container');
     container.innerHTML = '';
 
     let stickersToShow = [];
 
-    if (currentStickerCategory === 'recent') {
-        stickersToShow = [...db.myStickers]
-            .sort((a, b) => (b.lastUsedTime || 0) - (a.lastUsedTime || 0))
-            .slice(0, 20);
+    if (searchQuery) {
+        // 搜索模式：全局搜索
+        const lowerQuery = searchQuery.toLowerCase();
+        stickersToShow = db.myStickers.filter(s => s.name.toLowerCase().includes(lowerQuery));
+        
         if (stickersToShow.length === 0) {
-            container.innerHTML = '<p style="color:#aaa; text-align:center; grid-column:1/-1; padding:20px;">还没有使用过表情包哦</p>';
+            container.innerHTML = '<p style="color:#aaa; text-align:center; grid-column:1/-1; padding:20px;">未找到匹配的表情</p>';
             return;
         }
-    } else if (currentStickerCategory === 'all') {
-        stickersToShow = [...db.myStickers];
-    } else if (currentStickerCategory === 'ungrouped') {
-        stickersToShow = db.myStickers.filter(s => !s.group);
     } else {
-        stickersToShow = db.myStickers.filter(s => s.group === currentStickerCategory);
-    }
+        // 正常分类模式
+        if (currentStickerCategory === 'recent') {
+            stickersToShow = [...db.myStickers]
+                .sort((a, b) => (b.lastUsedTime || 0) - (a.lastUsedTime || 0))
+                .slice(0, 20);
+            if (stickersToShow.length === 0) {
+                container.innerHTML = '<p style="color:#aaa; text-align:center; grid-column:1/-1; padding:20px;">还没有使用过表情包哦</p>';
+                return;
+            }
+        } else if (currentStickerCategory === 'all') {
+            stickersToShow = [...db.myStickers];
+        } else if (currentStickerCategory === 'ungrouped') {
+            stickersToShow = db.myStickers.filter(s => !s.group);
+        } else {
+            stickersToShow = db.myStickers.filter(s => s.group === currentStickerCategory);
+        }
 
-    if (stickersToShow.length === 0) {
-        container.innerHTML = '<p style="color:#aaa; text-align:center; grid-column:1/-1; padding:20px;">该分组下没有表情</p>';
-        return;
+        if (stickersToShow.length === 0) {
+            container.innerHTML = '<p style="color:#aaa; text-align:center; grid-column:1/-1; padding:20px;">该分组下没有表情</p>';
+            return;
+        }
     }
 
     stickersToShow.forEach(sticker => {

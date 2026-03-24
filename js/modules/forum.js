@@ -414,28 +414,7 @@ ${context}
         const endpoint = `${url}/v1/chat/completions`;
         const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` };
 
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(requestBody)
-        });
-
-        if (!response.ok) {
-            const error = new Error(`API 请求失败: ${response.status} ${await response.text()}`);
-            error.response = response;
-            throw error;
-        }
-
-        let result;
-        try {
-            result = await response.json();
-        } catch (e) {
-            const text = await response.text();
-            console.error("Failed to parse JSON:", text);
-            throw new Error(`API返回了非JSON格式数据 (可能是网页HTML)。请检查API地址是否正确。原始内容开头: ${text.substring(0, 50)}...`);
-        }
-
-        const contentStr = result.choices[0].message.content;
+        const contentStr = await fetchAiResponse(db.apiSettings, requestBody, headers, endpoint);
 
         const jsonData = JSON.parse(contentStr);
         if (jsonData && Array.isArray(jsonData.posts)) {

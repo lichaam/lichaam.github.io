@@ -322,39 +322,21 @@ function setupPomodoroApp() {
             }
             systemPromptContent += `\n\n【我的角色设定】\n我的名字是${character.myName}，人设是：${userPersona}。`;
 
-            const response = await fetch(`${url}/v1/chat/completions`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${key}`
-                },
-                body: JSON.stringify({
-                    model: model,
-                    messages: [
-                        { role: 'system', content: systemPromptContent },
-                        { role: 'user', content: prompt }
-                    ],
-                    temperature: 0.8
-                })
-            });
+            const endpoint = `${url}/v1/chat/completions`;
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${key}`
+            };
+            const requestBody = {
+                model: model,
+                messages: [
+                    { role: 'system', content: systemPromptContent },
+                    { role: 'user', content: prompt }
+                ],
+                temperature: 0.8
+            };
 
-            if (!response.ok) {
-                const errorText = await response.text(); 
-                const error = new Error(`API请求失败: ${response.status} ${errorText}`);
-                error.response = response; 
-                throw error;
-            }
-
-            let result;
-            try {
-                result = await response.json();
-            } catch (e) {
-                const text = await response.text();
-                console.error("Failed to parse JSON:", text);
-                throw new Error(`API返回了非JSON格式数据 (可能是网页HTML)。请检查API地址是否正确。原始内容开头: ${text.substring(0, 50)}...`);
-            }
-
-            const reply = result.choices[0].message.content;
+            const reply = await fetchAiResponse(db.apiSettings, requestBody, headers, endpoint);
 
             pomodoroSessionHistory.push({ type: 'user', content: promptType });
             pomodoroSessionHistory.push({ type: 'ai', content: reply });
