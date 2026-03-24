@@ -88,8 +88,7 @@ const defaultIcons = {
     'diary-screen': {name: '日记本', url: 'https://i.postimg.cc/bJBLzmFH/chan-70.png'},
     'piggy-bank-screen': {name: '存钱罐', url: 'https://i.postimg.cc/3RmWRRtS/chan-18.png'},
     'pomodoro-screen': {name: '番茄钟', url: 'https://i.postimg.cc/PrYGRDPF/chan-76.png'},
-    'storage-analysis-screen': {name: '存储分析', url: 'https://i.postimg.cc/J0F3Lt0T/chan-107.png'},
-    'bubble-maker-screen': {name: '创意工坊', url: 'https://i.postimg.cc/zfM0NdQw/ji-lichan-(97).png'}
+    'storage-analysis-screen': {name: '存储分析', url: 'https://i.postimg.cc/J0F3Lt0T/chan-107.png'}
 };
 
 const peekScreenApps = {
@@ -104,16 +103,112 @@ const peekScreenApps = {
     'unlock': { name: 'unlock！', url: 'https://i.postimg.cc/28zNyYWs/export202509221542593320.png' }
 };
 
+const DEFAULT_COT_PRESETS = [
+    {
+        id: 'default',
+        name: '默认思维链',
+        items: [
+            {
+                id: 'cot_item_1',
+                name: '引子',
+                content: '[System Directive]:\n你必须严格遵守 [incipere] 协议。在回复前，请先进入 <thinking> 标签进行深度推演。\n请按以下步骤查阅 System Prompt 中的模块并思考：',
+                enabled: true
+            },
+            {
+                id: 'cot_item_2',
+                name: '准备动脑了吗？',
+                content: '---\n## 【前置规则】\n### **必须**读取所有<logic_rules>和<output_formats>：了解**所有**需要遵守的规则，然后进行以下步骤精简准确的思考',
+                enabled: true
+            },
+            {
+                id: 'cot_item_3',
+                name: '给我读设定！',
+                content: '---\n## 【行为校准】\n基于<char_settings>和<角色活人运转>构建角色人格\n### Phase1: person\n1. **自我意识校验 (Ref: <char_settings>和<角色活人运转>)**\n   - 是否塑造鲜活真实人格？\n   - 你（角色）是否具有自己的聊天习惯/风格？\n   - 你想如何回应我？',
+                enabled: true
+            },
+            {
+                id: 'cot_item_4',
+                name: '当个人吧。',
+                content: '### Phase2: Verisimilitude\n2.**真实聊天**\n   - 是否根据以下两点要求采用了真人聊天思路？\n    - 正常人的注意力是有限的，不会每句话都非得逐句回复。\n    - 不对已有信息进行重复反问。\n    - 断点处理：若与上一条消息间隔较久，默认双方只是自然忙碌后重新拿起手机或默认期间以其他方式保持联系，自然接续话题。',
+                enabled: true
+            },
+            {
+                id: 'cot_item_5',
+                name: '有特殊格式吗？',
+                content: '### Phase3: chat role\n3. **逻辑检索 (Ref: <logic_rules>)**\n   - 当前是否为双语对话情境？若无，跳过此条\n   - 是否需要输出状态栏？若无相关要求，则跳过此条',
+                enabled: true
+            },
+            {
+                id: 'cot_item_6',
+                name: '最后确认一下。',
+                content: '## 【最后确认】\n\n4. 整合<Chatting Guidelines>，是否合理自然回复且不偏离人设？回顾<output_formats>，输出消息格式是否正确？',
+                enabled: true
+            },
+            {
+                id: 'cot_item_7',
+                name: '尾声',
+                content: '每轮输出前，必须先严格按照<thinking>…</thinking>内的步骤进行逐条思考，无需重复其中的条目，但思考内容需精简准确、清晰、可执行，不得跳步骤。\n<thinking>中的所有分析必须在输出中完全落实，不得偏离、删减或弱化。\n\n格式：\n<thinking>\n...思考过程...\n</thinking>',
+                enabled: true
+            }
+        ]
+    }
+];
+
 const globalSettingKeys = [
     'apiSettings', 'wallpaper', 'homeScreenMode', 'fontUrl', 'customIcons',
     'apiPresets', 'bubbleCssPresets', 'myPersonaPresets', 'globalCss',
     'globalCssPresets', 'fontPresets', 'homeSignature', 'forumPosts', 'forumBindings', 'pomodoroTasks', 'pomodoroSettings', 'insWidgetSettings', 'homeWidgetSettings',
     'chatFolders', 'fontSizeScale', 'activePersonaId', 'moreProfileCardBg', 'statusBarPresets', 'themeSettings', 'themePresets', 'savedKeyboardHeight',
-    'globalSendSound', 'globalReceiveSound', 'soundPresets'
+    'globalSendSound', 'globalReceiveSound', 'multiMsgSoundEnabled', 'soundPresets', 'galleryPresets',
+    'cotSettings', 'cotPresets', 'hasSeenVideoCallDisclaimer', 'hasSeenVideoCallAvatarHint'
 ];
 
-const appVersion = "1.8.2";
+const appVersion = "1.8.5";
 const updateLog = [
+    {
+        version: "1.8.5",
+        date: "2026-02-18",
+        notes: [
+            "聊天功能新增：视频通话/语音通话，用户打电话入口在功能面板里，char主动打电话需在聊天设置里打开开关",
+            "思维链页面新增：通话专属cot设置，可开可不开，已内置默认思维链，支持自定义",
+            "**操作指南：所有人！去dc小手机主频道看使用教程视频！**",
+            "—————————————",
+            "通话结束后自动总结，仅总结内容进入上下文。",
+            "如总结失败，可以在通话记录里找到那次记录，点开，重新总结。如果频繁失败，可以复制通话记录里的全部内容找其他ai给你总结。",
+            "如何查看总结内容？：进入调试模式，点击那个“视频通话结束”的系统消息，可以看到总结内容",
+        ]
+    },
+    {
+        version: "1.8.4",
+        date: "2026-02-14",
+        notes: [
+            "新增卡COT思维链，原理同酒馆，部分预设条目改自吱吱的过境预设，卡cot方法原理来自KKM的预设教程，非常感谢！",
+            "思维链目前应该仅对**Open AI**的**Gemini**模型生效，其他模型暂未测试。",
+            "位置：404-Menu界面，默认为关闭状态，按需开启，内置默认思维链，支持自定义思维链，支持自定义思维链导入导出。",
+            "思维链功能可能会影响AI的回复风格，但开启后在回复条数的自然程度和各特殊消息的使用上有明显进步，请根据实际情况选择开启。",
+        ]
+    },
+    {
+        version: "1.8.3",
+        date: "2026-01-27",
+        notes: [
+            "1.日记功能升级！新增摘要总结风格，支持自定义风格。",
+            "现在生成日记会自动带入聊天室背景，无需重复绑定。",
+            "优化了日记生成的提示词，摘要风格更客观、时间线更清晰。",
+            "智能迁移：旧版日记关联已自动优化，去除了重复的背景设定。",
+            "合并精简：新增多选日记进行合并，将多篇日记整合成一篇连贯、精简的“回忆录”，自动梳理时间线。",
+            "参考过往：生成新日记时，可选择**参考已收藏的日记**。AI 会读取您收藏的重点回忆，确保新内容的连贯性，避免重复记录。",
+            "—————————————",
+            "2. 全新商城系统",
+            "自定义分类：支持自定义分类名称和提示词。商城首页点击右上角 “＋”",
+            "自选开关：如果不喜欢商城干扰聊天，可以在设置中关闭此功能。（仅关闭char不主动给你买东西和代付，你仍然可以单方面使用商城）",
+            "—————————————",
+            "3. 偷看界面 x 商城联动",
+            "在偷看模式下，进入 “购物车”应用，点击底部的“结算”按钮，可以直接帮Ta买单。在偷看界面结算后，系统会自动跳转回聊天界面，并发送一条 “我为Ta清空了购物车” 的订单消息。",
+            "4. 全局css救援",
+            "任何界面里快速点5下，呼出救援面板一键清空全局css框内容"
+        ]
+    },
     {
         version: "1.8.2",
         date: "2025-01-24",
@@ -309,7 +404,13 @@ var db = {
     globalSendSound: '',
     globalReceiveSound: '',
     multiMsgSoundEnabled: false,
-    soundPresets: []
+    soundPresets: [],
+    galleryPresets: [],
+    cotSettings: {
+        enabled: false,
+        activePresetId: 'default'
+    },
+    cotPresets: JSON.parse(JSON.stringify(DEFAULT_COT_PRESETS))
 };
 
 var currentChatId = null;
@@ -391,7 +492,9 @@ function initDatabase() {
                 pomodoroSettings: data.pomodoroSettings || { boundCharId: null, userPersona: '', focusBackground: '', taskCardBackground: '', encouragementMinutes: 25, pokeLimit: 5, globalWorldBookIds: [] },
                 insWidgetSettings: data.insWidgetSettings || { avatar1: 'https://i.postimg.cc/Y96LPskq/o-o-2.jpg', bubble1: 'love u.', avatar2: 'https://i.postimg.cc/GtbTnxhP/o-o-1.jpg', bubble2: 'miss u.' },
                 homeWidgetSettings: data.homeWidgetSettings || defaultWidgetSettings,
-                moreProfileCardBg: data.moreProfileCardBg || 'https://i.postimg.cc/XvFDdTKY/Smart-Select-20251013-023208.jpg'
+            moreProfileCardBg: data.moreProfileCardBg || 'https://i.postimg.cc/XvFDdTKY/Smart-Select-20251013-023208.jpg',
+            cotSettings: data.cotSettings || { enabled: false, activePresetId: 'default' },
+            cotPresets: data.cotPresets || JSON.parse(JSON.stringify(DEFAULT_COT_PRESETS))
             };
 
             const settingsPromises = Object.entries(settingsToMigrate).map(([key, value]) =>
@@ -468,7 +571,12 @@ const loadData = async () => {
             globalSendSound: '',
             globalReceiveSound: '',
             multiMsgSoundEnabled: false,
-            soundPresets: []
+            soundPresets: [],
+            galleryPresets: [],
+            cotSettings: { enabled: false, activePresetId: 'default' },
+            cotPresets: JSON.parse(JSON.stringify(DEFAULT_COT_PRESETS)),
+            hasSeenVideoCallDisclaimer: false,
+            hasSeenVideoCallAvatarHint: false
         };
         db[key] = settings[key] !== undefined ? settings[key] : (defaultValue[key] !== undefined ? JSON.parse(JSON.stringify(defaultValue[key])) : undefined);
     });
@@ -504,6 +612,7 @@ const loadData = async () => {
         }
         if (!c.gallery) c.gallery = [];
         if (c.useRealGallery === undefined) c.useRealGallery = false;
+        if (!c.callHistory) c.callHistory = [];
     });
     db.groups.forEach(g => {
         if (g.isPinned === undefined) g.isPinned = false;
@@ -512,6 +621,7 @@ const loadData = async () => {
         if (g.useCustomBubbleCss === undefined) g.useCustomBubbleCss = false;
         if (g.showTimestamp === undefined) g.showTimestamp = false;
         if (g.timestampPosition === undefined) g.timestampPosition = 'below_avatar';
+        if (!g.callHistory) g.callHistory = [];
     });
     
     // Handle old localStorage data if it exists
@@ -597,6 +707,8 @@ const dataStorage = {
         // 5. API and Core
         categorizedSizes.apiAndCore += stringify(db.apiSettings);
         categorizedSizes.apiAndCore += stringify(db.apiPresets);
+        categorizedSizes.apiAndCore += stringify(db.cotSettings);
+        categorizedSizes.apiAndCore += stringify(db.cotPresets);
 
         const totalSize = Object.values(categorizedSizes).reduce((sum, size) => sum + size, 0);
 

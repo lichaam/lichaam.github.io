@@ -70,7 +70,7 @@ function setupGroupChatSystem() {
                     };
                 }),
                 theme: 'white_pink',
-                maxMemory: 10,
+                maxMemory: 100,
                 chatBg: '',
                 history: [],
                 isPinned: false,

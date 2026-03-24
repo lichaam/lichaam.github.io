@@ -256,11 +256,21 @@ function updateCustomBubbleStyle(chatId, css, enabled) {
 
     if (!enabled || !css) return;
 
+    // 获取 chat 对象以支持模板变量
+    let chat = null;
+    if (typeof db !== 'undefined') {
+        chat = db.characters.find(c => c.id === chatId) || db.groups.find(g => g.id === chatId);
+    }
+
+    // 处理模板变量 ({{char_avatar}}, {{user_avatar}} 等)
+    // processTemplate 定义在 js/utils.js 中
+    const processedCss = (typeof processTemplate === 'function' && chat) ? processTemplate(css, chat) : css;
+
     const styleElement = document.createElement('style');
     styleElement.id = `custom-bubble-style-for-${chatId}`;
     styleElement.className = STYLE_TAG_CLASS;
 
-    styleElement.textContent = css;
+    styleElement.textContent = processedCss;
 
     document.head.appendChild(styleElement);
 }
@@ -394,10 +404,6 @@ function setupHomeScreen() {
                 <a href="#" class="app-icon" data-target="forum-screen">
                     <img src="${getIcon('forum-screen')}" alt="论坛" class="icon-img">
                     <span class="app-name">${defaultIcons['forum-screen'].name}</span>
-                </a>
-                <a href="#" class="app-icon" data-target="bubble-maker-screen">
-                    <img src="${getIcon('bubble-maker-screen')}" alt="创意工坊" class="icon-img">
-                    <span class="app-name">${defaultIcons['bubble-maker-screen'].name}</span>
                 </a>
              </div>
         </div>

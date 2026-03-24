@@ -344,6 +344,53 @@ function calculateVoiceDuration(text) {
     return Math.max(1, Math.min(60, Math.ceil(text.length / 3.5)));
 }
 
+// 模板处理函数：替换头像、名字等变量
+function processTemplate(html, char) {
+    if (!html || !char) return html;
+    let processed = html;
+    
+    // 获取当前上下文中的头像和名字
+    // 注意：currentChatType 和 db 是全局变量，确保在此处可用
+    const isPrivate = (typeof currentChatType !== 'undefined' && currentChatType === 'private');
+    
+    let userAvatar, charAvatar, userName, charName, charRemark;
+
+    if (isPrivate) {
+        userAvatar = char.myAvatar || 'https://i.postimg.cc/Y96LPskq/o-o-2.jpg';
+        charAvatar = char.avatar || 'https://i.postimg.cc/Y96LPskq/o-o-2.jpg';
+        userName = char.myName || 'User';
+        charName = char.name || 'Character';
+        charRemark = char.remarkName || charName;
+    } else {
+        // 群聊逻辑
+        userAvatar = (char.me && char.me.avatar) ? char.me.avatar : 'https://i.postimg.cc/Y96LPskq/o-o-2.jpg';
+        charAvatar = char.avatar || 'https://i.postimg.cc/Y96LPskq/o-o-2.jpg'; // 群头像
+        userName = (char.me && char.me.nickname) ? char.me.nickname : 'User';
+        charName = char.name || 'Group';
+        charRemark = charName;
+    }
+
+    // 简单变量替换
+    processed = processed.replace(/{{user_avatar}}/g, userAvatar);
+    processed = processed.replace(/{{char_avatar}}/g, charAvatar);
+    processed = processed.replace(/{{user_name}}/g, userName);
+    processed = processed.replace(/{{char_name}}/g, charName);
+    processed = processed.replace(/{{char_remark}}/g, charRemark);
+    processed = processed.replace(/{{user_remark}}/g, userName); // user_remark 等同于 user_name
+
+    // 标签替换 (支持可选的 style 和 class 属性)
+    // <user-avatar class="..." style="..."> -> <img src="..." class="uwu-user-avatar ..." style="...">
+    processed = processed.replace(/<user-avatar([^>]*)>\s*(?:<\/user-avatar>)?/gi, (match, attrs) => {
+        return `<img src="${userAvatar}" class="uwu-user-avatar" ${attrs}>`;
+    });
+
+    processed = processed.replace(/<char-avatar([^>]*)>\s*(?:<\/char-avatar>)?/gi, (match, attrs) => {
+        return `<img src="${charAvatar}" class="uwu-char-avatar" ${attrs}>`;
+    });
+
+    return processed;
+}
+
 // 解析混合内容 (文本+HTML)
 function getMixedContent(responseData) {
     const results = [];
@@ -438,3 +485,321 @@ function getMixedContent(responseData) {
     }
     return results;
 }
+
+// 过滤聊天记录用于 AI 上下文 (包含状态栏剔除和双语格式化)
+function filterHistoryForAI(chat, historySlice, ignoreContextDisabled = false) {
+    // 1. 基础过滤：深度克隆并过滤掉被屏蔽上下文的消息
+    let filteredHistory = JSON.parse(JSON.stringify(historySlice || chat.history));
+    if (!ignoreContextDisabled) {
+        filteredHistory = filteredHistory.filter(m => !m.isContextDisabled);
+    }
+
+    // 【三重保险】强制清洗所有消息内容中的 <thinking> 标签块
+    // 防止思维链内容意外混入普通消息中
+    filteredHistory.forEach(msg => {
+        if (msg.content && typeof msg.content === 'string') {
+            msg.content = msg.content.replace(/<thinking>[\s\S]*?<\/thinking>/g, '').trim();
+        }
+        if (msg.parts && Array.isArray(msg.parts)) {
+            msg.parts.forEach(p => {
+                if (p.type === 'text' && p.text) {
+                    p.text = p.text.replace(/<thinking>[\s\S]*?<\/thinking>/g, '').trim();
+                }
+            });
+        }
+    });
+
+    // 2. 双语模式格式标准化
+    if (chat.bilingualModeEnabled) {
+        filteredHistory.forEach(msg => {
+            if (msg.role === 'assistant') {
+                if (msg.content) {
+                    msg.content = msg.content.replace(/[\s\n]*[\(（]([^\)）]+)[\)）]([\s\n]*\])$/, '「$1」$2');
+                    msg.content = msg.content.replace(/[\s\n]*[\(（]([^\)）]+)[\)）]$/, '「$1」');
+                }
+                if (msg.parts && Array.isArray(msg.parts)) {
+                    msg.parts.forEach(p => {
+                        if (p.type === 'text' && p.text) {
+                            p.text = p.text.replace(/[\s\n]*[\(（]([^\)）]+)[\)）]([\s\n]*\])$/, '「$1」$2');
+                            p.text = p.text.replace(/[\s\n]*[\(（]([^\)）]+)[\)）]$/, '「$1」');
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    // 3. 状态栏移除逻辑
+    if (chat.statusPanel && chat.statusPanel.enabled && chat.statusPanel.regexPattern) {
+        const currentRegexStr = chat.statusPanel.regexPattern;
+        const limit = chat.statusPanel.historyLimit !== undefined ? chat.statusPanel.historyLimit : 3;
+        const validityDepth = 50;
+        let statusCount = 0;
+        const totalSliceLength = filteredHistory.length;
+
+        let currentRegexParsed = currentRegexStr;
+        const regexMatch = currentRegexStr.match(/^\/(.*?)\/([a-z]*)$/);
+        if (regexMatch) {
+            currentRegexParsed = regexMatch[1];
+        }
+
+        // 3.1 预处理
+        filteredHistory = filteredHistory.filter((msg, index) => {
+            if (msg.isStatusUpdate) {
+                const depth = totalSliceLength - 1 - index;
+                if (depth >= validityDepth) return false;
+                if (!msg.statusSnapshot) return false;
+                if (msg.statusSnapshot.regex !== currentRegexParsed) return false;
+                return true;
+            }
+            return true;
+        });
+
+        // 3.2 遍历处理
+        for (let i = filteredHistory.length - 1; i >= 0; i--) {
+            const msg = filteredHistory[i];
+            const currentDepth = filteredHistory.length - 1 - i;
+            
+            if (msg.isStatusUpdate) {
+                if (statusCount < limit) {
+                    statusCount++;
+                } else {
+                    msg.content = '';
+                    msg.parts = [];
+                }
+                continue;
+            }
+
+            let pattern = chat.statusPanel.regexPattern;
+            let flags = 'gs';
+            const matchParts = pattern.match(/^\/(.*?)\/([a-z]*)$/);
+            if (matchParts) {
+                pattern = matchParts[1];
+                flags = matchParts[2] || 'gs';
+                if (!flags.includes('g')) flags += 'g';
+                if (!flags.includes('s')) flags += 's';
+            }
+            let regex;
+            try {
+                regex = new RegExp(pattern, flags);
+            } catch (e) {
+                console.error("Invalid regex in status panel settings:", e);
+                continue;
+            }
+
+            if (msg.role === 'assistant') {
+                const originalContent = msg.content || '';
+                const newContent = originalContent.replace(regex, '').trim();
+                const contentHasMatch = (newContent !== originalContent);
+
+                let partsHasMatch = false;
+                let newParts = undefined;
+                
+                if (msg.parts && Array.isArray(msg.parts)) {
+                    newParts = msg.parts.map(p => {
+                        if (p.type === 'text') {
+                            try {
+                                const partRegex = new RegExp(pattern, flags);
+                                const newText = p.text.replace(partRegex, '').trim();
+                                if (newText !== p.text) partsHasMatch = true;
+                                return { ...p, text: newText };
+                            } catch (e) {
+                                return p;
+                            }
+                        }
+                        return p;
+                    }).filter(p => {
+                        if (p.type === 'text') return p.text !== '';
+                        return true;
+                    });
+                }
+
+                if (contentHasMatch || partsHasMatch) {
+                    if (currentDepth < validityDepth && statusCount < limit) {
+                        statusCount++;
+                    } else {
+                        if (contentHasMatch) msg.content = newContent;
+                        if (partsHasMatch && newParts) msg.parts = newParts;
+                        if (!msg.content && (!msg.parts || msg.parts.length === 0)) {
+                            msg.content = '';
+                        }
+                    }
+                }
+            }
+        }
+
+        // 3.3 最终过滤
+        filteredHistory = filteredHistory.filter(msg => {
+            const hasContent = msg.content && msg.content.trim() !== '';
+            const hasParts = msg.parts && msg.parts.length > 0;
+            return hasContent || hasParts;
+        });
+    }
+
+    return filteredHistory;
+}
+
+// 通用 AI 响应获取函数 (支持流式和非流式自动切换)
+async function fetchAiResponse(settings, requestBody, headers, endpoint, forceStream = false) {
+    const { provider } = settings;
+    const streamEnabled = forceStream || settings.streamEnabled;
+
+    // 1. 针对流式传输调整 Request Body 和 Endpoint
+    if (streamEnabled) {
+        if (provider === 'gemini') {
+            if (endpoint.includes(':generateContent')) {
+                endpoint = endpoint.replace(':generateContent', ':streamGenerateContent');
+            }
+        } else {
+            requestBody.stream = true;
+        }
+    }
+
+    // 2. 发送请求
+    const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(requestBody)
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        const error = new Error(`API Error: ${response.status} ${errorText}`);
+        error.response = response;
+        throw error;
+    }
+
+    // 3. 处理响应
+    // 优先检查响应头是否指示流式，或者我们是否显式请求了流式
+    const contentType = response.headers.get('content-type') || '';
+    const isStreamResponse = streamEnabled || contentType.includes('text/event-stream');
+
+    if (isStreamResponse) {
+        return await readStreamResponse(response, provider);
+    } else {
+        // 普通 JSON 响应 (带容错处理)
+        const text = await response.text();
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            // JSON 解析失败。检查是否是 SSE 格式的文本 (针对未设置 header 的流式响应)
+            if (text.includes('data: ')) {
+                console.warn("Received SSE response without header, parsing as text...");
+                let fallbackContent = "";
+                const lines = text.split('\n');
+                for (const line of lines) {
+                    if (line.startsWith('data: ') && !line.includes('[DONE]')) {
+                        try {
+                            const json = JSON.parse(line.substring(6));
+                            fallbackContent += json.choices[0].delta?.content || "";
+                        } catch (e2) {}
+                    }
+                }
+                if (fallbackContent) return fallbackContent;
+            }
+            throw new Error(`Failed to parse JSON response: ${text.substring(0, 100)}...`);
+        }
+
+        if (provider === 'gemini') {
+            return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        } else {
+            return data.choices[0].message.content;
+        }
+    }
+}
+
+async function readStreamResponse(response, provider) {
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let fullResponse = "";
+    let accumulatedChunk = "";
+
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        accumulatedChunk += decoder.decode(value, { stream: true });
+
+        if (provider !== 'gemini') {
+            // OpenAI / Standard SSE logic
+            const parts = accumulatedChunk.split("\n\n");
+            accumulatedChunk = parts.pop();
+            for (const part of parts) {
+                if (part.startsWith("data: ")) {
+                    const data = part.substring(6);
+                    if (data.trim() !== "[DONE]") {
+                        try {
+                            const json = JSON.parse(data);
+                            fullResponse += json.choices[0].delta?.content || "";
+                        } catch (e) {}
+                    }
+                }
+            }
+        }
+    }
+
+    // Handle remaining chunk for OpenAI
+    if (provider !== 'gemini' && accumulatedChunk && accumulatedChunk.trim().length > 0) {
+         if (accumulatedChunk.startsWith("data: ")) {
+             const data = accumulatedChunk.substring(6);
+             if (data.trim() !== "[DONE]") {
+                 try {
+                     const json = JSON.parse(data);
+                     fullResponse += json.choices[0].delta?.content || "";
+                 } catch (e) {}
+             }
+         }
+    }
+
+    // Gemini logic (accumulate all and parse at the end)
+    if (provider === 'gemini') {
+        try {
+            // 尝试解析为 JSON 数组
+            const parsedStream = JSON.parse(accumulatedChunk);
+            if (Array.isArray(parsedStream)) {
+                fullResponse = parsedStream.map(item => item.candidates?.[0]?.content?.parts?.[0]?.text || "").join('');
+            }
+        } catch (e) {
+            console.error("Gemini stream parsing failed", e);
+        }
+    }
+
+    return fullResponse;
+}
+
+// --- 图片查看器 ---
+function openImageViewer(src) {
+    const modal = document.getElementById('full-image-modal');
+    const img = document.getElementById('full-image-view');
+    const closeBtn = document.getElementById('close-full-image-btn');
+    
+    if (!modal || !img) return;
+    
+    img.src = src;
+    modal.classList.add('visible');
+    
+    // 简单的关闭逻辑
+    const closeModal = () => {
+        modal.classList.remove('visible');
+        setTimeout(() => { img.src = ''; }, 300); // 动画结束后清空
+    };
+    
+    if (closeBtn) closeBtn.onclick = closeModal;
+    modal.onclick = (e) => {
+        if (e.target === modal || e.target.closest('.modal-window')) {
+            // 点击图片本身不关闭，点击背景关闭
+            if (e.target !== img) {
+                closeModal();
+            }
+        }
+    };
+}
+
+// 暴露给全局
+window.openImageViewer = openImageViewer;
+window.getRandomValue = getRandomValue;
+window.pad = pad;
+window.formatTimeGap = formatTimeGap;
+window.filterHistoryForAI = filterHistoryForAI;
+window.showToast = showToast;
+window.playSound = (typeof playSound !== 'undefined') ? playSound : null; // 防止循环依赖

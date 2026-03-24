@@ -40,7 +40,8 @@ function setupChatSettings() {
     });
 
     // --- Tab 切换逻辑 ---
-    const tabs = document.querySelectorAll('.settings-tab-item');
+    // 仅选择聊天设置和群聊设置中的 Tab，排除 CoT 设置
+    const tabs = document.querySelectorAll('#chat-settings-screen .settings-tab-item, #group-settings-screen .settings-tab-item');
     const contents = document.querySelectorAll('.settings-tab-content');
 
     tabs.forEach(tab => {
@@ -52,7 +53,10 @@ function setupChatSettings() {
             // 添加当前 active 类
             tab.classList.add('active');
             const targetId = tab.getAttribute('data-tab');
-            document.getElementById(targetId).classList.add('active');
+            if (targetId) {
+                const targetEl = document.getElementById(targetId);
+                if (targetEl) targetEl.classList.add('active');
+            }
         });
     });
     
@@ -295,6 +299,10 @@ function loadSettingsToSidebar() {
             }
         }
 
+        document.getElementById('setting-shop-interaction-enabled').checked = e.shopInteractionEnabled !== false;
+
+        document.getElementById('setting-video-call-enabled').checked = e.videoCallEnabled || false;
+
         const ar = e.autoReply || {};
         document.getElementById('setting-auto-reply-enabled').checked = ar.enabled || false;
         document.getElementById('setting-auto-reply-interval').value = ar.interval || 60;
@@ -389,6 +397,10 @@ async function saveSettingsFromSidebar() {
         e.statusPanel.replacePattern = document.getElementById('setting-status-replace').value;
         const historyLimitInput = parseInt(document.getElementById('setting-status-history-limit').value, 10);
         e.statusPanel.historyLimit = isNaN(historyLimitInput) ? 3 : historyLimitInput;
+
+        e.shopInteractionEnabled = document.getElementById('setting-shop-interaction-enabled').checked;
+
+        e.videoCallEnabled = document.getElementById('setting-video-call-enabled').checked;
 
         if (!e.autoReply) e.autoReply = {};
         e.autoReply.enabled = document.getElementById('setting-auto-reply-enabled').checked;
@@ -1708,7 +1720,7 @@ function renderCustomizeForm() {
     const iconOrder = [
         'chat-list-screen', 'api-settings-screen', 'wallpaper-screen',
         'world-book-screen', 'customize-screen', 'tutorial-screen',
-        'day-mode-btn', 'night-mode-btn', 'forum-screen', 'music-screen', 'diary-screen', 'piggy-bank-screen', 'pomodoro-screen', 'storage-analysis-screen', 'bubble-maker-screen'
+        'day-mode-btn', 'night-mode-btn', 'forum-screen', 'music-screen', 'diary-screen', 'piggy-bank-screen', 'pomodoro-screen', 'storage-analysis-screen'
     ];
 
     let iconsContentHTML = '';
